@@ -39,7 +39,7 @@ class AppAsset extends AssetBundle
         'template/js/semantic.min.js',
     ];
     public $depends = [
-        // 'yii\web\YiiAsset',
+        'yii\web\YiiAsset',
         // 'yii\bootstrap4\BootstrapAsset',
     ];
 }

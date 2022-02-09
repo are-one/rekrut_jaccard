@@ -55,6 +55,9 @@ AppAsset::register($this);
                                 </div>
                             </div>
                         </div>
+
+                        <?= Alert::widget() ?>
+
                         <!-- row -->
                         <div class="row column1">
                             <div class="col-md-12">

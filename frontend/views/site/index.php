@@ -1,53 +1,65 @@
-<?php
-
-/* @var $this yii\web\View */
-
-$this->title = 'My Yii Application';
-?>
-<div class="site-index">
-
-    <div class="jumbotron text-center bg-transparent">
-        <h1 class="display-4">Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+<div class="white_shd full margin_bottom_30">
+    <div class="full graph_head">
+        <div class="heading1 margin_0">
+            <h2>Temukan Pekerjaan Yang Cocok Untuk Kamu</small></h2>
+        </div>
     </div>
-
-    <div class="body-content">
-
+    <div class="full price_table padding_infor_info">
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <div class="col-lg-12">
+                <div class="table-responsive-sm">
+                    <table class="table table-striped projects">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th style="width: 50%">Pekerjaan Baru</th>
+                                <th>Lihat Syarat & Ketentuan</th>
+                                <th>Project Progress</th>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
 
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+                                <td>
+                                    <a>Sed ut perspiciatis unde omnis iste natus
+                                        error sit volup tatem accus antium
+                                        doloremque</a>
+                                </td>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-xs"> Lihat
+                                        Persyaratan</button>
+                                </td>
 
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-xs">Lamar
+                                        Langsung</button>
+                                </td>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                            </tr>
+                            <tr>
 
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                                <td>
+                                    <a>At vero eos et accusamus et iusto odio
+                                        dignissimos ducimus qui bland itiis
+                                        praesentium</a>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-success btn-xs"> Lihat
+                                        Persyaratan</button>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-success btn-xs">Lamar
+                                        Langsung</button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
     </div>
 </div>

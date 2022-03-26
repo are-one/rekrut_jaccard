@@ -3,15 +3,14 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use backend\assets\AppLoginAsset;
+use backend\assets\AppAsset;
 use yii\helpers\Html;
 
-AppLoginAsset::register($this);
+AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
-
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,22 +18,16 @@ AppLoginAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
+<body class="d-flex flex-column h-100">
+<?php $this->beginBody() ?>
 
-<body class="inner_page login">
-    <?php $this->beginBody() ?>
-
-    <div class="full_container">
-        <div class="container">
-            <div class="center verticle_center full_height">
-
-                <?= $content ?>
-
-            </div>
-        </div>
+<main role="main">
+    <div class="container">
+        <?= $content ?>
     </div>
+</main>
 
-    <?php $this->endBody() ?>
+<?php $this->endBody() ?>
 </body>
-
 </html>
 <?php $this->endPage();

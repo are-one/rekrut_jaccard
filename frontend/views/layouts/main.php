@@ -21,7 +21,6 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <!-- site metas -->
-    <title>User-index</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -51,7 +50,7 @@ AppAsset::register($this);
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>Slamat Datang Calon Pelamar Baru</h2>
+                                    <h2>Selamat Datang Calon Pelamar Baru</h2>
                                 </div>
                             </div>
                         </div>

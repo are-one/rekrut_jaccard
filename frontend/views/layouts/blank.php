@@ -3,7 +3,9 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use common\widgets\Alert as WidgetsAlert;
 use frontend\assets\AppLoginAsset;
+use yii\bootstrap4\Alert;
 use yii\helpers\Html;
 
 AppLoginAsset::register($this);
@@ -26,7 +28,6 @@ AppLoginAsset::register($this);
     <div class="full_container">
         <div class="container">
             <div class="center verticle_center full_height">
-
                 <?= $content ?>
 
             </div>

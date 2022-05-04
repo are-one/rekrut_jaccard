@@ -4,9 +4,12 @@ namespace frontend\controllers;
 
 use frontend\models\Pelamar;
 use frontend\models\search\PelamarSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * PelamarController implements the CRUD actions for Pelamar model.
@@ -21,6 +24,22 @@ class PelamarController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'except' => ['login', 'signup'],
+                    'rules' => [
+                        // [
+                        //     'actions' => ['login','signup'],
+                        //     'allow' => true,
+                        //     'roles' => ['?'],
+                        // ],
+                        [
+                            'actions' => [],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -67,7 +86,7 @@ class PelamarController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Pelamar();
+        $model = new Pelamar(['scenario' => Pelamar::SCENARIO_INSERT]);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -93,8 +112,29 @@ class PelamarController extends Controller
     {
         $model = $this->findModel($nik);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'nik' => $model->nik]);
+        $model->scenario = $model::SCENARIO_UPDATE;
+        if($model->file_cv != null || $model->file_ijazah != null) $model->scenario = $model::SCENARIO_INSERT;
+
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->uploadCv = UploadedFile::getInstance($model,'uploadCv');
+            $model->uploadIjazah = UploadedFile::getInstance($model,'uploadIjazah');
+            
+            if($model->uploadCv != null){
+                $model->file_cv = $model->nik. "-cv-".time(). '.' . $model->uploadCv->extension;
+            }
+
+            if($model->uploadIjazah != null){
+                $model->file_ijazah = $model->nik. "-ijazah-".time(). '.' . $model->uploadIjazah->extension;
+            }
+            
+            if($model->upload(false)){
+                if($model->save()){
+                    Yii::$app->session->setFlash('success','Profile berhasil diedit.');
+                    return $this->redirect(['/site/profile']);
+                }
+            }
+
+            Yii::$app->session->setFlash('error','Terjadi kesalahan, Profile gagal diedit.');
         }
 
         return $this->render('update', [
@@ -130,5 +170,13 @@ class PelamarController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionFile($id, $type)
+    {
+        $attachment = ($type == 1)? "File Ijazah.pdf" : "File CV.pdf";
+        $filePath = Yii::getAlias('@frontend/assets/berkas/'.$id);
+
+        return $this->response->sendFile($filePath,$attachment,['inline' => true])->send();
     }
 }

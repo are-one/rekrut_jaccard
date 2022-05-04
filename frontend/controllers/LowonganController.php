@@ -2,8 +2,12 @@
 
 namespace frontend\controllers;
 
+use frontend\models\Interview;
 use frontend\models\Lowongan;
+use frontend\models\Pelamar;
 use frontend\models\search\LowonganSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +25,22 @@ class LowonganController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'except' => ['login', 'signup'],
+                    'rules' => [
+                        // [
+                        //     'actions' => ['login','signup'],
+                        //     'allow' => true,
+                        //     'roles' => ['?'],
+                        // ],
+                        [
+                            'actions' => [],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -131,4 +151,40 @@ class LowonganController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionLamar($id)
+    {
+        try {
+            
+            // CEK APAKAH DATA LENGKAP
+            // $modelPelamar = new Pelamar();
+            $modelPelamar = Pelamar::findOne(['nik' => Yii::$app->user->identity->id]);
+            if($modelPelamar){
+
+                if($modelPelamar->validasiData()){
+                    $modelInterview = new Interview();
+        
+                    $modelInterview->lowongan_id = $id;
+                    $modelInterview->pelamar_nik = strval(Yii::$app->user->identity->id);
+        
+                    if($modelInterview->save()){
+                        return $this->redirect(['/site/index']);
+                    }
+                }
+                
+                Yii::$app->session->setFlash('error', "Mohon lengkapi data anda untuk dapat melamar loker.");
+                return $this->redirect(['/site/profile']);
+            }
+
+            Yii::$app->user->logout();
+            Yii::$app->session->setFlash('error', "Mohon lakukan registrasi ulang karena anda tidak ditemukan.");
+            return $this->redirect(['/site/login']);
+            
+        } catch (\Throwable $th) {
+            throw new NotFoundHttpException("Terjadi masalah pada server $th");
+            
+        }
+    }
+
+    
 }

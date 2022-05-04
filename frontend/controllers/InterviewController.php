@@ -4,6 +4,8 @@ namespace frontend\controllers;
 
 use frontend\models\Interview;
 use frontend\models\search\InterviewSearch;
+use frontend\models\SoalInterview;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -40,6 +42,7 @@ class InterviewController extends Controller
     {
         $searchModel = new InterviewSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['pelamar_nik' => Yii::$app->user->identity->id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -130,5 +133,14 @@ class InterviewController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionTest()
+    {
+        $interview = Interview::findOne(['pelamar_nik' => Yii::$app->user->identity->id]);
+
+        $soal = SoalInterview::find()->where(['interview_id' => $interview->id])->all();
+        
+        return $this->render('test', ['soal' => $soal]);
     }
 }

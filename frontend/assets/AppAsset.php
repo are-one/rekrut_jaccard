@@ -20,10 +20,12 @@ class AppAsset extends AssetBundle
         'template/css/bootstrap-select.css',
         'template/css/perfect-scrollbar.css',
         'template/css/custom.css',
+        'template/css/all.css',
         'template/js/semantic.min.css',
     ];
     public $js = [
-        'template/js/jquery.min.js',
+        'template/js/all.js',
+        // 'template/js/jquery.min.js',
         'template/js/popper.min.js',
         'template/js/bootstrap.min.js',
         'template/js/animate.js',

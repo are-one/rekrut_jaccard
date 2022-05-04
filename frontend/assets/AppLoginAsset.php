@@ -28,12 +28,12 @@ class AppLoginAsset extends AssetBundle
         'template/js/bootstrap.min.js',
         'template/js/animate.js',
         'template/js/bootstrap-select.js',
-        'template/js/perfect-scrollbar.min.js',
-        'template/js/custom2.js',
-        'template/js/custom.js',
+        // 'template/js/perfect-scrollbar.min.js',
+        // 'template/js/custom.js',
+        // 'template/js/custom2.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        // 'yii\bootstrap4\BootstrapAsset',
+        'yii\bootstrap4\BootstrapAsset',
     ];
 }

@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'hrd_nik',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Lowongan $model, $key, $index, $column) {
+                'urlCreator' => function ($action, \frontend\models\Lowongan $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

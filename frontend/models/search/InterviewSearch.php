@@ -18,7 +18,7 @@ class InterviewSearch extends Interview
     {
         return [
             [['id', 'lowongan_id'], 'integer'],
-            [['pelamar_nik'], 'safe'],
+            [['pelamar_nik', 'tanggal_interview'], 'safe'],
         ];
     }
 
@@ -60,6 +60,7 @@ class InterviewSearch extends Interview
         $query->andFilterWhere([
             'id' => $this->id,
             'lowongan_id' => $this->lowongan_id,
+            'tanggal_interview' => $this->tanggal_interview,
         ]);
 
         $query->andFilterWhere(['like', 'pelamar_nik', $this->pelamar_nik]);

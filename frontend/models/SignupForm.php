@@ -11,6 +11,8 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
+    public $nik;
+    public $nama_lengkap;
     public $username;
     public $email;
     public $password;
@@ -22,6 +24,12 @@ class SignupForm extends Model
     public function rules()
     {
         return [
+            ['nik', 'required'],
+            ['nik', 'string', 'max' => 45],
+
+            ['nama_lengkap', 'required'],
+            ['nama_lengkap', 'string', 'max' => 255],
+
             ['username', 'trim'],
             ['username', 'required'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
@@ -45,18 +53,41 @@ class SignupForm extends Model
      */
     public function signup()
     {
-        if (!$this->validate()) {
-            return null;
-        }
-        
-        $user = new User();
-        $user->username = $this->username;
-        $user->email = $this->email;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
-        $user->generateEmailVerificationToken();
+        try {
+            $transaction = Yii::$app->db->beginTransaction();
+            
+            if (!$this->validate()) {
+                return null;
+            }
+            
+            $user = new User();
+            $user->username = $this->username;
+            $user->email = $this->email;
+            $user->setPassword($this->password);
+            $user->generateAuthKey();
+            $user->generateEmailVerificationToken();
+            $user->isHrd = 0;
 
-        return $user->save() && $this->sendEmail($user);
+            // Insert Pelamar
+            $pelamar = new Pelamar(['scenario' => Pelamar::SCENARIO_INSERT]);
+            $pelamar->nik = $this->nik;
+            $pelamar->nama_lengkap = $this->nama_lengkap;
+            $pelamar->email = $this->email;
+    
+            if($user->save() && $this->sendEmail($user) && $pelamar->save()){
+                $transaction->commit();
+                return true;
+            }else{
+                Yii::$app->session->setFlash('error','Terjadi masalah pada sistem, gagal membuat akun.');
+                $transaction->rollBack();
+            }
+            
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            Yii::$app->session->setFlash('error','Terjadi masalah pada sistem, gagal membuat akun.');
+        }
+
+        return false;
     }
 
     /**

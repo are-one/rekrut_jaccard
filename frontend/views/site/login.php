@@ -4,19 +4,25 @@
 /* @var $form yii\bootstrap4\ActiveForm */
 /* @var $model \common\models\LoginForm */
 
+use common\widgets\Alert;
 use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
 // use yii\bootstrap4\Html;
 use yii\helpers\Url;
 
 $this->title = 'Login';
 ?>
+
 <div class="login_section">
     <div class="logo_login">
         <div class="center">
-            <img width="210" src="<?= Url::to('@web') ?>/template/images/logo/logo.png" alt="#" />
+            <h1 class="text-white">Jaccard Similarity</h1>
+            <!-- <img width="210" src="<?= Url::to('@web') ?>/template/images/logo/logo.png" alt="#" /> -->
         </div>
     </div>
     <div class="login_form">
+        <?= Alert::widget() ?>
+
         <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
         <fieldset>
             <div class="field">
@@ -60,11 +66,16 @@ $this->title = 'Login';
             </div>
             <div class="field margin_0">
                 <label class="label_field hidden">hidden label</label>
-                <button class="main_bt">Sing In</button>
+                <button class="main_bt">Sign In</button>
             </div>
         </fieldset>
 
         <?php ActiveForm::end(); ?>
 
+    </div>
+    <div class="row text-center mb-4">
+        <div class="col-md-12">
+            <?= Html::a("Buat Akun",['/site/signup'],['class' => 'btn btn-link']) ?>
+        </div>
     </div>
 </div>

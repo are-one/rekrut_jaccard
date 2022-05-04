@@ -16,6 +16,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'pelamar_nik')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'tanggal_interview')->textInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

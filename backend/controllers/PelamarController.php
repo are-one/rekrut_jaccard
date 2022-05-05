@@ -131,4 +131,15 @@ class PelamarController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionFile($id,$j)
+    {
+        try {
+            $filePath = \Yii::getAlias("@frontend/assets/berkas/".$id);
+
+            return $this->response->sendFile($filePath, "Lihat File ".$j.".pdf",['inline' => true])->send();
+        } catch (\Throwable $th) {
+            throw new NotFoundHttpException("File tidak ditemukan");
+        }
+    }
 }

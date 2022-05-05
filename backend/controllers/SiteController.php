@@ -2,6 +2,10 @@
 
 namespace backend\controllers;
 
+use backend\models\HasilInterview;
+use backend\models\Hrd;
+use backend\models\Lowongan;
+use backend\models\Pelamar;
 use common\models\LoginForm;
 use Yii;
 use yii\filters\VerbFilter;
@@ -28,9 +32,13 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'profile'],
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' => function($rule, $action)
+                        {
+                            return Yii::$app->user->identity->is_hrd == 1;
+                        }
                     ],
                 ],
             ],
@@ -62,7 +70,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $data = [
+            'pelamar' => Pelamar::find()->count(),
+            'lowongan' => Lowongan::find()->count(),
+            'lulus' => HasilInterview::find()->where(['hasil' => 1])->count(),
+        ];
+        return $this->render('index',compact('data'));
     }
 
     /**
@@ -101,4 +114,12 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
+    public function actionProfile()
+    {
+        $hrd = Hrd::findOne(['nik' => Yii::$app->user->identity->id]);
+
+        return $this->render('profile', ['hrd' => $hrd]);
+    }
+
 }

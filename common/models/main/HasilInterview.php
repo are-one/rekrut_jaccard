@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string|null $keterangan
  * @property int $interview_id
+ * @property int $hasil
  *
  * @property Interview $interview
  */
@@ -29,8 +30,8 @@ class HasilInterview extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'interview_id'], 'required'],
-            [['id', 'interview_id'], 'integer'],
+            [['id', 'interview_id', 'hasil'], 'required'],
+            [['id', 'interview_id', 'hasil'], 'integer'],
             [['keterangan'], 'string'],
             [['id', 'interview_id'], 'unique', 'targetAttribute' => ['id', 'interview_id']],
             [['interview_id'], 'exist', 'skipOnError' => true, 'targetClass' => Interview::className(), 'targetAttribute' => ['interview_id' => 'id']],
@@ -46,6 +47,7 @@ class HasilInterview extends \yii\db\ActiveRecord
             'id' => 'ID',
             'keterangan' => 'Keterangan',
             'interview_id' => 'Interview ID',
+            'hasil' => 'Hasil',
         ];
     }
 

@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property int $lowongan_id
  * @property string $pelamar_nik
+ * @property string|null $tanggal_interview
  *
  * @property HasilInterview[] $hasilInterviews
  * @property Lowongan $lowongan
@@ -35,6 +36,7 @@ class Interview extends \yii\db\ActiveRecord
         return [
             [['lowongan_id', 'pelamar_nik'], 'required'],
             [['lowongan_id'], 'integer'],
+            [['tanggal_interview'], 'safe'],
             [['pelamar_nik'], 'string', 'max' => 45],
             [['lowongan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lowongan::className(), 'targetAttribute' => ['lowongan_id' => 'id']],
             [['pelamar_nik'], 'exist', 'skipOnError' => true, 'targetClass' => Pelamar::className(), 'targetAttribute' => ['pelamar_nik' => 'nik']],
@@ -50,6 +52,7 @@ class Interview extends \yii\db\ActiveRecord
             'id' => 'ID',
             'lowongan_id' => 'Lowongan ID',
             'pelamar_nik' => 'Pelamar Nik',
+            'tanggal_interview' => 'Tanggal Interview',
         ];
     }
 

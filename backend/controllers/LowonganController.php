@@ -2,8 +2,10 @@
 
 namespace backend\controllers;
 
+use backend\models\Hrd;
 use backend\models\Lowongan;
 use backend\models\search\LowonganSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -67,19 +69,34 @@ class LowonganController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Lowongan();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        try {
+            
+            $model = new Lowongan();
+            $hrd = Hrd::findOne(['nik' => Yii::$app->user->identity->id]);
+            if($hrd) {
+                $model->hrd_nik = $hrd->nik;
+            }else{
+                Yii::$app->session->setFlash('error', 'Update data HRD anda belum lengkap');
+                $this->redirect(['index']);
             }
-        } else {
-            $model->loadDefaultValues();
-        }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+            if ($this->request->isPost) {
+                if ($model->load($this->request->post()) && $model->save()) {
+                    // return $this->redirect(['view', 'id' => $model->id]);
+                    return $this->redirect(['index']);
+                }
+            } else {
+                $model->loadDefaultValues();
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+
+        } catch (\Throwable $th) {
+            throw new NotFoundHttpException("Error Processing Request $th");
+            
+        }
     }
 
     /**

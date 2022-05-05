@@ -4,6 +4,7 @@
 /* @var $form yii\bootstrap4\ActiveForm */
 /* @var $model \common\models\LoginForm */
 
+use common\widgets\Alert;
 use yii\bootstrap4\ActiveForm;
 // use yii\bootstrap4\Html;
 use yii\helpers\Url;
@@ -17,6 +18,8 @@ $this->title = 'Login';
         </div>
     </div>
     <div class="login_form">
+        <?= Alert::widget() ?>
+
         <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
         <fieldset>
             <div class="field">
@@ -60,7 +63,7 @@ $this->title = 'Login';
             </div>
             <div class="field margin_0">
                 <label class="label_field hidden">hidden label</label>
-                <button class="main_bt">Sing In</button>
+                <button class="main_bt">Sign In</button>
             </div>
         </fieldset>
 

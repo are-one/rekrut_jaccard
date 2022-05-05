@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use backend\models\Hrd;
 use backend\models\search\HrdSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +23,29 @@ class HrdController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['create', 'view','update','index'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function()
+                            {
+                                return Yii::$app->user->identity->is_hrd == 2;
+                            }
+                        ],
+                        [
+                            'actions' => ['edit'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function()
+                            {
+                                return Yii::$app->user->identity->is_hrd == 1;
+                            }
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -130,5 +155,18 @@ class HrdController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionEdit($nik)
+    {
+        $model = $this->findModel($nik);
+
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['/site/profile']);
+        }
+
+        return $this->render('edit', [
+            'model' => $model,
+        ]);
     }
 }

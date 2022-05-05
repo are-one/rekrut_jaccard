@@ -16,7 +16,7 @@ use yii\helpers\Url;
                 <div class="user_img"><img class="img-responsive"
                         src="<?= Url::to('@web') ?>/template/images/layout_img/user_img.jpg" alt="#" /></div>
                 <div class="user_info">
-                    <h6>John David</h6>
+                    <h6><?= (Yii::$app->user->isGuest)? "No Session" : Yii::$app->user->identity->username ?></h6>
                     <p><span class="online_animation"></span> Online</p>
                 </div>
             </div>

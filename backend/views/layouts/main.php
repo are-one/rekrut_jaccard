@@ -5,12 +5,14 @@
 
 use backend\assets\AppAsset;
 use common\widgets\Alert;
+use kartik\icons\FontAwesomeAsset;
 use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 
 AppAsset::register($this);
+FontAwesomeAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -19,10 +21,7 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <!-- site metas -->
-    <title>User-index</title>
-    <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
     <?php $this->registerCsrfMetaTags() ?>
@@ -51,7 +50,7 @@ AppAsset::register($this);
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>Slamat Datang Calon Pelamar Baru</h2>
+                                    <h2>Selamat Datang</h2>
                                 </div>
                             </div>
                         </div>

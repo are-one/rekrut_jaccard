@@ -2,18 +2,16 @@
 
 namespace backend\controllers;
 
-use backend\models\Interview;
-use backend\models\Penilaian;
-use backend\models\search\InterviewSearch;
-use backend\models\SoalInterview;
+use backend\models\PilihanJawaban;
+use backend\models\search\PilihanJawabanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * InterviewController implements the CRUD actions for Interview model.
+ * PilihanJawabanController implements the CRUD actions for PilihanJawaban model.
  */
-class InterviewController extends Controller
+class PilihanJawabanController extends Controller
 {
     /**
      * @inheritDoc
@@ -34,13 +32,13 @@ class InterviewController extends Controller
     }
 
     /**
-     * Lists all Interview models.
+     * Lists all PilihanJawaban models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new InterviewSearch();
+        $searchModel = new PilihanJawabanSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -50,30 +48,32 @@ class InterviewController extends Controller
     }
 
     /**
-     * Displays a single Interview model.
+     * Displays a single PilihanJawaban model.
      * @param int $id ID
+     * @param string $soal_interview_id Soal Interview ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $soal_interview_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id, $soal_interview_id),
         ]);
     }
 
     /**
-     * Creates a new Interview model.
+     * Creates a new PilihanJawaban model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($soal_interview_id)
     {
-        $model = new Interview();
-
+        $model = new PilihanJawaban();
+        $model->soal_interview_id = $soal_interview_id;
+        
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['/soal-interview/view', 'id' => $model->soal_interview_id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -85,18 +85,19 @@ class InterviewController extends Controller
     }
 
     /**
-     * Updates an existing Interview model.
+     * Updates an existing PilihanJawaban model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
+     * @param string $soal_interview_id Soal Interview ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $soal_interview_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($id, $soal_interview_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id, 'soal_interview_id' => $model->soal_interview_id]);
         }
 
         return $this->render('update', [
@@ -105,29 +106,31 @@ class InterviewController extends Controller
     }
 
     /**
-     * Deletes an existing Interview model.
+     * Deletes an existing PilihanJawaban model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
+     * @param string $soal_interview_id Soal Interview ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $soal_interview_id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id, $soal_interview_id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Interview model based on its primary key value.
+     * Finds the PilihanJawaban model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Interview the loaded model
+     * @param string $soal_interview_id Soal Interview ID
+     * @return PilihanJawaban the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($id, $soal_interview_id)
     {
-        if (($model = Interview::findOne(['id' => $id])) !== null) {
+        if (($model = PilihanJawaban::findOne(['id' => $id, 'soal_interview_id' => $soal_interview_id])) !== null) {
             return $model;
         }
 

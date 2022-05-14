@@ -4,12 +4,12 @@ namespace backend\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Interview;
+use backend\models\PilihanJawaban;
 
 /**
- * InterviewSearch represents the model behind the search form of `backend\models\Interview`.
+ * PilihanJawabanSearch represents the model behind the search form of `backend\models\PilihanJawaban`.
  */
-class InterviewSearch extends Interview
+class PilihanJawabanSearch extends PilihanJawaban
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class InterviewSearch extends Interview
     public function rules()
     {
         return [
-            [['id', 'lowongan_id'], 'integer'],
-            [['pelamar_nik','tanggal_interview'], 'safe'],
+            [['id'], 'integer'],
+            [['pilihan', 'soal_interview_id'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class InterviewSearch extends Interview
      */
     public function search($params)
     {
-        $query = Interview::find();
+        $query = PilihanJawaban::find();
 
         // add conditions that should always apply here
 
@@ -59,11 +59,10 @@ class InterviewSearch extends Interview
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'lowongan_id' => $this->lowongan_id,
         ]);
 
-        $query->andFilterWhere(['like', 'pelamar_nik', $this->pelamar_nik]);
-        $query->andFilterWhere(['like', 'tanggal_interview', $this->tanggal_interview]);
+        $query->andFilterWhere(['like', 'pilihan', $this->pilihan])
+            ->andFilterWhere(['like', 'soal_interview_id', $this->soal_interview_id]);
 
         return $dataProvider;
     }

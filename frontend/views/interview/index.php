@@ -48,26 +48,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($model)
                                 {
 
-                                    $dataTes = Penilaian::findOne(['interview_id' => $model->id]);
+                                    $waktu = strtotime($model->tanggal_interview);
+                                    $textWaktu = date('j F Y', $waktu);
+                                            
+                                    $dataTes = Penilaian::find()->where(['interview_id' => $model->id])->andWhere(['pilih'=> null])->one();
 
-                                    if($dataTes == null){
-
-                                        if($model->tanggal_interview == null){
-                                            return "<span>Belum Ada Jadwal</span> <br>". Html::a('<i class="fa fa-pen"></i> Ikuti Tes', "#",['class' => 'btn btn-sm btn-danger disabled']);
-                                        }else{
-                                            $waktu = strtotime($model->tanggal_interview);
-                                            if($waktu > time()){
-                                                return $model->tanggal_interview . " ". Html::a('<i class="fa fa-pen"></i> Ikuti Tes', ['/interview/test','id' => $model->id],['class' => 'btn btn-sm btn-primary']);
-                                            }if(time() > $waktu){
-                                                return '<span class="badge badge-info"> Waktu Tes Telah Selesai</span>';
-                                            }else{
-                                                return $model->tanggal_interview . " ". Html::a('<i class="fa fa-pen"></i> Ikuti Tes', "#",['class' => 'btn btn-sm btn-warning']);
-                                            }
-                                        }
-                                        
+                                    
+                                    if($model->tanggal_interview == null){
+                                        return "<span>Belum Ada Jadwal</span> <br>". Html::a('<i class="fa fa-pen"></i> Ikuti Tes', "#",['class' => 'btn btn-sm btn-danger disabled']);
                                     }else{
-                                        return '<span class="badge badge-success"> Interview/Tes sudah dikerjakan</span>';
+                                        
+                                        if($dataTes != null){
+
+                                            if($waktu > time()){
+                                                return $textWaktu . " ". Html::a('<i class="fa fa-pen"></i> Ikuti Tes', ['/interview/test','id' => $model->id],['class' => 'btn btn-sm btn-primary']);
+                                            }else{
+                                                return '<span class="badge badge-info"> Waktu Tes Telah Selesai</span>';
+                                            }
+                                        }else{
+                                            return $textWaktu.' <br><span class="badge badge-success"> Interview/Tes sudah dikerjakan</span>';
+                                        }
                                     }
+                                        
                                 },
                                 'format' => 'raw'
                             ],
@@ -77,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'buttons' => [
                                     'detail-lowongan' => function($url, $model, $key)
                                     {
-                                        return Html::a('Detail Lowongan',['/lowongan/view','id'=> $model->id],['class' => 'btn btn-success btn-xs']);
+                                        return Html::a('Detail Lowongan',['/lowongan/view','id'=> $model->lowongan_id],['class' => 'btn btn-success btn-xs']);
                                     }
                                 ],
                                 'template' => '{detail-lowongan}'

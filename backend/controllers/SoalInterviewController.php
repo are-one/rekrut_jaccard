@@ -2,11 +2,16 @@
 
 namespace backend\controllers;
 
+use backend\models\Penilaian;
+use backend\models\PilihanJawaban;
 use backend\models\SoalInterview;
 use backend\models\search\SoalInterviewSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * SoalInterviewController implements the CRUD actions for SoalInterview model.
@@ -55,8 +60,12 @@ class SoalInterviewController extends Controller
      */
     public function actionView($id)
     {
+        $dataProvider = new ActiveDataProvider([
+            'query' => PilihanJawaban::find()->where(['soal_interview_id' => $id]),
+        ]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -69,10 +78,15 @@ class SoalInterviewController extends Controller
     {
         $model = new SoalInterview();
 
+        $hrdNik = Yii::$app->user->identity->id;        
+        $model->hrd_nik = strval($hrdNik);
+
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+
+            // print_r($model->errors);die;
         } else {
             $model->loadDefaultValues();
         }
@@ -130,5 +144,68 @@ class SoalInterviewController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionPilihSoal($id)
+    {
+        $soalInterviewModel = new SoalInterview;
+        
+        $dataProvider = new ActiveDataProvider([
+            'query' => $soalInterviewModel->find(),
+        ]);
+        $penilaianModel = new Penilaian();
+        $pilihanSoalLama = ArrayHelper::getColumn($penilaianModel->find()->where(['interview_id' => $id])->all(),'soal_interview_id');
+        // print_r($pilihanSoal);die;
+        
+        if($this->request->isPost){
+            $pilihan = $this->request->post('pilihan');
+            $lama = $pilihanSoalLama;
+
+            try {
+                $transaction = Yii::$app->db->beginTransaction();
+
+                $isSuccess = true;
+                
+                foreach ($pilihan as $key => $value) {
+                    if(in_array($value, $lama)) {
+                        $keyDel = array_search($value, $lama);
+                        unset($lama[$keyDel]);
+                        continue;
+                    }
+                    
+                    $modelPenilaian = new Penilaian();
+                    $modelPenilaian->interview_id = $id;
+                    $modelPenilaian->soal_interview_id = $value;
+                    
+                    if(!$modelPenilaian->save()){
+                        $isSuccess = false;
+                        break;
+                    }
+                }
+
+                if($lama){
+                    foreach ($lama as $key => $value) {
+                        $hapusModel = Penilaian::findOne(['interview_id' => $id, 'soal_interview_id' => $value])->delete();
+                    }
+                }
+
+                if($isSuccess){
+                    $transaction->commit();
+                    Yii::$app->session->setFlash('success','Data berhasil disimpan');
+                    return $this->redirect(['/interview/index']);
+                }else{
+                    $transaction->rollBack();
+                    Yii::$app->session->setFlash('error','Data gagal disimpan');
+                }
+            } catch (\Throwable $th) {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error','Data gagal disimpan');
+            }
+          
+
+
+        }
+
+        return $this->render('pilih-soal',['pilihanSoalLama' => $pilihanSoalLama, 'dataProvider' => $dataProvider]);
     }
 }

@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "soal_interview".
  *
- * @property int $id
+ * @property string $id
  * @property string|null $soal
  * @property string|null $jawaban
  * @property string|null $kategori
@@ -16,6 +16,7 @@ use Yii;
  * @property Hrd $hrdNik
  * @property Interview[] $interviews
  * @property Penilaian[] $penilaians
+ * @property PilihanJawaban[] $pilihanJawabans
  */
 class SoalInterview extends \yii\db\ActiveRecord
 {
@@ -34,9 +35,8 @@ class SoalInterview extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'hrd_nik'], 'required'],
-            [['id'], 'integer'],
             [['soal'], 'string'],
-            [['jawaban', 'kategori', 'hrd_nik'], 'string', 'max' => 45],
+            [['id', 'jawaban', 'kategori', 'hrd_nik'], 'string', 'max' => 45],
             [['id'], 'unique'],
             [['hrd_nik'], 'exist', 'skipOnError' => true, 'targetClass' => Hrd::className(), 'targetAttribute' => ['hrd_nik' => 'nik']],
         ];
@@ -84,5 +84,15 @@ class SoalInterview extends \yii\db\ActiveRecord
     public function getPenilaians()
     {
         return $this->hasMany(Penilaian::className(), ['soal_interview_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[PilihanJawabans]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPilihanJawabans()
+    {
+        return $this->hasMany(PilihanJawaban::className(), ['soal_interview_id' => 'id']);
     }
 }

@@ -5,23 +5,22 @@ namespace common\models\main;
 use Yii;
 
 /**
- * This is the model class for table "penilaian".
+ * This is the model class for table "pilihan_jawaban".
  *
- * @property int $interview_id
+ * @property int $id
+ * @property string|null $pilihan
  * @property string $soal_interview_id
- * @property int|null $pilih
  *
- * @property Interview $interview
  * @property SoalInterview $soalInterview
  */
-class Penilaian extends \yii\db\ActiveRecord
+class PilihanJawaban extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'penilaian';
+        return 'pilihan_jawaban';
     }
 
     /**
@@ -30,11 +29,9 @@ class Penilaian extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['interview_id', 'soal_interview_id'], 'required'],
-            [['interview_id', 'pilih'], 'integer'],
+            [['soal_interview_id'], 'required'],
+            [['pilihan'], 'string', 'max' => 255],
             [['soal_interview_id'], 'string', 'max' => 45],
-            [['interview_id', 'soal_interview_id'], 'unique', 'targetAttribute' => ['interview_id', 'soal_interview_id']],
-            [['interview_id'], 'exist', 'skipOnError' => true, 'targetClass' => Interview::className(), 'targetAttribute' => ['interview_id' => 'id']],
             [['soal_interview_id'], 'exist', 'skipOnError' => true, 'targetClass' => SoalInterview::className(), 'targetAttribute' => ['soal_interview_id' => 'id']],
         ];
     }
@@ -45,20 +42,10 @@ class Penilaian extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'interview_id' => 'Interview ID',
+            'id' => 'ID',
+            'pilihan' => 'Pilihan',
             'soal_interview_id' => 'Soal Interview ID',
-            'pilih' => 'Pilih',
         ];
-    }
-
-    /**
-     * Gets query for [[Interview]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getInterview()
-    {
-        return $this->hasOne(Interview::className(), ['id' => 'interview_id']);
     }
 
     /**

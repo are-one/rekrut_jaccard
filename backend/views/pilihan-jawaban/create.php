@@ -3,22 +3,24 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\SoalInterview */
+/* @var $model backend\models\PilihanJawaban */
 
-$this->title = 'Tambah Soal Interview';
-$this->params['breadcrumbs'][] = ['label' => 'Soal Interviews', 'url' => ['index']];
+$this->title = 'Buat Pilihan Jawaban';
+$this->params['breadcrumbs'][] = ['label' => 'Pilihan Jawabans', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="white_shd full margin_bottom_30">
     <div class="full graph_head">
         <div class="heading1 margin_0">
-            <h2><small><?= Html::encode($this->title) ?></small></h2>
+            <h1><?= Html::encode($this->title) ?></h1>
         </div>
     </div>
 
     <div class="full price_table padding_infor_info">
         <div class="row">
             <div class="col-lg-12">
+
 
                 <?= $this->render('_form', [
                     'model' => $model,

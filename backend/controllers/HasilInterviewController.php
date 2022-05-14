@@ -135,4 +135,70 @@ class HasilInterviewController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionHitung()
+    {
+        $data = [
+            0 => [
+                    'id_loker' => 3,
+                    'nik' => 3454,
+                    'nama' => 'Bambang',
+                    'jawaban' => [
+                        0 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        1 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        2 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        3 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        4 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        5 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        6 => ['id_soal' => 23, 'jawaban' => 'a'],
+                    ]
+                ],
+            1 => [
+                    'id_loker' => 3,
+                    'nik' => 3451,
+                    'nama' => 'Cahyono',
+                    'jawaban' => [
+                        0 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        1 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        2 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        3 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        4 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        5 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        6 => ['id_soal' => 23, 'jawaban' => 'a'],
+                    ]
+                ],
+            2 => [
+                    'id_loker' => 3,
+                    'nik' => 3453,
+                    'nama' => 'Dedi',
+                    'jawaban' => [
+                        0 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        1 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        2 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        3 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        4 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        5 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        6 => ['id_soal' => 23, 'jawaban' => 'a'],
+                    ]
+                ],
+            3 => [
+                    'id_loker' => 3,
+                    'nik' => 3453,
+                    'nama' => 'Eko',
+                    'jawaban' => [
+                        0 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        1 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        2 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        3 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        4 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        5 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        6 => ['id_soal' => 23, 'jawaban' => 'a'],
+                    ]
+                ],
+
+        ];
+
+
+
+    }
 }

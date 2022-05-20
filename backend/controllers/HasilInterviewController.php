@@ -3,10 +3,15 @@
 namespace backend\controllers;
 
 use backend\models\HasilInterview;
+use backend\models\Interview;
+use backend\models\Lowongan;
+use backend\models\Pelamar;
 use backend\models\search\HasilInterviewSearch;
+use backend\models\SoalInterview;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * HasilInterviewController implements the CRUD actions for HasilInterview model.
@@ -138,67 +143,140 @@ class HasilInterviewController extends Controller
 
     public function actionHitung()
     {
-        $data = [
-            0 => [
-                    'id_loker' => 3,
+
+        $loker = Lowongan::find()->all();
+        $pelamar = Pelamar::find()->all();   // belum di pakai
+        $daftarInterview = Interview::find()->joinWith(['pelamarNik', 'penilaians'])->asArray()->all();
+        $soalInterview = SoalInterview::find()->all();
+        $arraySoalInterview = ArrayHelper::map($soalInterview, 'id', function ($model) {
+            return $model;
+        });
+
+        /* $data = [
+            id_loker => [
+                [
                     'nik' => 3454,
                     'nama' => 'Bambang',
                     'jawaban' => [
-                        0 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        1 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        2 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        3 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        4 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        5 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        6 => ['id_soal' => 23, 'jawaban' => 'a'],
+                        id_soal => ['interview_id' => 23, 'pilih' => 3],
+                        id_soal => ['interview_id' => 23, 'pilih' => 4],
+                        id_soal => ['interview_id' => 23, 'pilih' => 5],
+                        id_soal => ['interview_id' => 23, 'pilih' => 4],
                     ]
                 ],
-            1 => [
-                    'id_loker' => 3,
-                    'nik' => 3451,
-                    'nama' => 'Cahyono',
-                    'jawaban' => [
-                        0 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        1 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        2 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        3 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        4 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        5 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        6 => ['id_soal' => 23, 'jawaban' => 'a'],
-                    ]
-                ],
-            2 => [
-                    'id_loker' => 3,
-                    'nik' => 3453,
-                    'nama' => 'Dedi',
-                    'jawaban' => [
-                        0 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        1 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        2 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        3 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        4 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        5 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        6 => ['id_soal' => 23, 'jawaban' => 'a'],
-                    ]
-                ],
-            3 => [
-                    'id_loker' => 3,
-                    'nik' => 3453,
-                    'nama' => 'Eko',
-                    'jawaban' => [
-                        0 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        1 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        2 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        3 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        4 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        5 => ['id_soal' => 23, 'jawaban' => 'a'],
-                        6 => ['id_soal' => 23, 'jawaban' => 'a'],
-                    ]
-                ],
+            ];
+         */
+        $data = [];
 
-        ];
+        foreach ($loker as $il => $mLoker) {
+
+            // Memetakan data interview berdasarkan lowongan kerja
+            foreach ($daftarInterview as $ik => $mInterview) {
+                if ($mInterview['lowongan_id'] == $mLoker->id) {
+                    unset($mInterview['lowongan_id']);
+                    unset($mInterview['tanggal_interview']);
+
+                    $tempJawaban = ArrayHelper::map($mInterview['penilaians'], 'soal_interview_id', function ($dj) {
+                        return $dj;
+                    });
+
+                    // TODO Urutkan jawaban sesuai data soal dan Validasi jawaban berdasarkan jawaban soal
+                    foreach ($arraySoalInterview as $is => $mSoal) {
+                        if (isset($tempJawaban[$mSoal->id])) {
+                            $dataJawaban = $tempJawaban[$mSoal->id];
+
+                            unset($dataJawaban['soal_interview_id']);
+
+                            /* 
+                                check jika jawaban mSoal sama dengan pilihan dataJawaban, jika iya ubah nilai [pilih] = 1, jika sebailknya beri nilai 0
+                             */
+                            $dataJawaban['pilih'] = ($mSoal->jawaban == $dataJawaban['pilih']) ? 1 : 0;
+                            $mInterview['jawaban'][$mSoal->id] = $dataJawaban;
+                        } else {
+                            $mInterview['jawaban'] = false;
+                        }
+                        unset($mInterview['penilaians']);
+                    }
 
 
+                    $data[$mLoker->id][] = $mInterview;
+                }
+            }
+        }
 
+        // print_r($data);
+        // die;
+        /* 
+        $hasil = [
+            id_loker => [
+                0 => [
+                    id_pelamar_1 => 23,
+                    id_pelamar_2 => 21,
+                    intersect => 3,
+                    union => 4,
+                    kesamaan => 30,          
+                    perbedaan => 20, 
+                ]
+            ]
+        ]
+        */
+        $hasil = [];
+        foreach ($data as $id_loker => $list1Interview) {
+            $hasil[$id_loker] = [];
+            $urutanHasil = 0;
+
+            $list2Interview = $list1Interview;
+            // print_r($list1Interview);
+            // die;
+
+            // Ambil bagian pertama list1
+            foreach ($list1Interview as $il => $interview1) {
+
+                // Jika jumlah data di list2 tersisa 1, maka proses membandingkan di loker 1 di hentikan
+                if (count($list2Interview) < 2) break;
+
+                unset($list2Interview[$il]);
+
+                if ($interview1['jawaban'] == false) {
+                    // Hapus data $interview1 yang ada dalam list2 agar tidak dibandingkan dengan data yang sama
+                    continue;
+                }
+
+                // Ambil data bagian kedua di list2
+                // lalu bandingkan dengan data list1
+                foreach ($list2Interview as $il2 => $interview2) {
+                    if ($interview2['jawaban'] == false) continue;
+                    $hasil[$id_loker][$urutanHasil]['id_pelamar_1'] = $interview1['pelamar_nik'];
+                    $hasil[$id_loker][$urutanHasil]['id_pelamar_2'] = $interview2['pelamar_nik'];
+                    $jawabanInterview1 = $interview1['jawaban'];
+                    $jawabanInterview2 = $interview2['jawaban'];
+
+                    // Proses membandingkan jawaban tiap soal
+                    // 
+                    // - Hitung dengan poin 1 jika jawaban sama pada nomor soal yang sesusai (Intersect)
+                    $nilaiIntersect = 0;
+                    foreach ($soalInterview as $i => $modelSoal) {
+                        $id_soal = $modelSoal->id;
+                        $j1 = $jawabanInterview1[$id_soal]['pilih'];
+                        $j2 = $jawabanInterview2[$id_soal]['pilih'];
+                        if (($j1 == 1) && ($j2 == 1)) $nilaiIntersect++;
+                    }
+                    $hasil[$id_loker][$urutanHasil]['intersect'] = $nilaiIntersect; // Hasil poin disimpan disini
+
+                    // - Gabungkan jawaban interview pertama dan interview ke 2 pada nomor soal yang sesuai,
+                    // tetapkan poin 1 jika memiliki nilai 1, tetapkan poin 2 jika tidak memiliki poin 1 sama sekali (Union)
+                    $hasil[$id_loker][$urutanHasil]['union'] = 'nilai'; // Hasil poin disimpan disini
+
+                    $urutanHasil++;
+                }
+
+                // unset bagian pertama list2 yang telah digunakan dari data list1
+                unset($list2Interview[0]);
+            }
+        }
+
+        print_r($hasil);
+        print_r($data);
+        die;
     }
 }

@@ -36,8 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'lowongan_id',
                                 'label' => 'Lowongan',
-                                'value' => function($model)
-                                {
+                                'value' => function ($model) {
                                     return $model->lowongan->nama_pekerjaan;
                                 }
                             ],
@@ -45,31 +44,31 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'tanggal_interview',
                                 'label' => 'Jadwal',
-                                'value' => function($model)
-                                {
+                                'value' => function ($model) {
 
                                     $waktu = strtotime($model->tanggal_interview);
                                     $textWaktu = date('j F Y', $waktu);
-                                            
-                                    $dataTes = Penilaian::find()->where(['interview_id' => $model->id])->andWhere(['pilih'=> null])->one();
 
-                                    
-                                    if($model->tanggal_interview == null){
-                                        return "<span>Belum Ada Jadwal</span> <br>". Html::a('<i class="fa fa-pen"></i> Ikuti Tes', "#",['class' => 'btn btn-sm btn-danger disabled']);
-                                    }else{
-                                        
-                                        if($dataTes != null){
+                                    $dataTes = Penilaian::find()->where(['interview_id' => $model->id])->andWhere(['pilih' => null])->one();
+                                    // print_r($dataTes);
+                                    // die;
 
-                                            if($waktu > time()){
-                                                return $textWaktu . " ". Html::a('<i class="fa fa-pen"></i> Ikuti Tes', ['/interview/test','id' => $model->id],['class' => 'btn btn-sm btn-primary']);
-                                            }else{
-                                                return '<span class="badge badge-info"> Waktu Tes Telah Selesai</span>';
+                                    if ($model->tanggal_interview == null) {
+                                        return "<span class='badge badge-warning'>Belum Ada Jadwal</span>";
+                                    } else {
+
+                                        if ($dataTes != null) {
+
+                                            if ($waktu > time()) {
+                                                return $textWaktu . " " . Html::a('<i class="fa fa-pen"></i> Ikuti Tes', ['/interview/test', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']);
+                                            } else {
+                                                return '<span class="badge badge-success"> Waktu Tes Telah Selesai</span>';
                                             }
-                                        }else{
-                                            return $textWaktu.' <br><span class="badge badge-success"> Interview/Tes sudah dikerjakan</span>';
+                                        } else {
+                                            return $textWaktu . ' <br><span class="badge badge-info">Data Interview/Tes sedang diproses</span>';
+                                            // return $textWaktu . ' <br><span class="badge badge-success"> Interview/Tes sudah dikerjakan</span>';
                                         }
                                     }
-                                        
                                 },
                                 'format' => 'raw'
                             ],
@@ -77,9 +76,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header' => 'Aksi',
                                 'class' => ActionColumn::class,
                                 'buttons' => [
-                                    'detail-lowongan' => function($url, $model, $key)
-                                    {
-                                        return Html::a('Detail Lowongan',['/lowongan/view','id'=> $model->lowongan_id],['class' => 'btn btn-success btn-xs']);
+                                    'detail-lowongan' => function ($url, $model, $key) {
+                                        return Html::a('Detail Lowongan', ['/lowongan/view', 'id' => $model->lowongan_id], ['class' => 'btn btn-success btn-xs']);
                                     }
                                 ],
                                 'template' => '{detail-lowongan}'

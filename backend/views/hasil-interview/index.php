@@ -26,10 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-lg-12">
                 <div class="table-responsive-sm">
                     <p>
-                        <?php Html::a('Create Hasil Interview', ['create'], ['class' => 'btn btn-success']) ?>
+                        <?= Html::a('<i class="fas fa-sync"></i> Update Hasil', ['create'], ['class' => 'btn btn-success']) ?>
                     </p>
 
-                    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                    <?php // echo $this->render('_search', ['model' => $searchModel]); 
+                    ?>
 
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -43,8 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'interview_id',
                                 'label' => 'Pelamar',
-                                'value' => function($model)
-                                {
+                                'value' => function ($model) {
                                     return $model->interview->pelamarNik->nama_lengkap;
                                 }
                             ],

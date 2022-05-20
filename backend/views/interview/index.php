@@ -31,7 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php Html::a('Create Interview', ['create'], ['class' => 'btn btn-success']) ?>
     </p> -->
 
-                    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                    <?php // echo $this->render('_search', ['model' => $searchModel]); 
+                    ?>
 
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -42,37 +43,34 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             // 'id',
                             [
-                                'attribute'=>'lowongan_id',
+                                'attribute' => 'lowongan_id',
                                 'label' => 'Lowongan',
-                                'value' => function($model)
-                                {
+                                'value' => function ($model) {
                                     return $model->lowongan->nama_pekerjaan;
                                 }
                             ],
                             [
-                                'attribute'=>'pelamar_nik',
+                                'attribute' => 'pelamar_nik',
                                 'label' => 'Pelamar',
-                                'value' => function($model)
-                                {
-                                    $text = "<b class='text-dark'>".$model->pelamarNik->nama_lengkap."</b><br><i class='text-muted'>".$model->pelamar_nik."</i>";
+                                'value' => function ($model) {
+                                    $text = "<b class='text-dark'>" . $model->pelamarNik->nama_lengkap . "</b><br><i class='text-muted'>" . $model->pelamar_nik . "</i>";
                                     return $text;
                                 },
                                 'format' => 'raw',
                             ],
                             [
-                                'attribute'=>'tanggal_interview',
+                                'attribute' => 'tanggal_interview',
                                 'label' => 'Jadwal Interview / Tes',
-                                'headerOptions' => ['style'=> 'width:25%'],
-                                'value' => function($model)
-                                {
-                                    if($model->tanggal_interview != null){
+                                'headerOptions' => ['style' => 'width:25%'],
+                                'value' => function ($model) {
+                                    if ($model->tanggal_interview != null) {
                                         $waktu = strtotime($model->tanggal_interview);
-                                        if($waktu > time()){
-                                            return date('j F Y', $waktu). " <i class='badge badge-success'>Waktu Interview/Tes Diatur</i>";
-                                        }else{
-                                            return date('j F Y', $waktu). " <i class='badge badge-danger'>Waktu Interview/Tes Telah Selesai</i>";
+                                        if ($waktu > time()) {
+                                            return date('j F Y', $waktu) . "<br><i class='badge badge-success'>Waktu Interview/Tes Diatur</i>";
+                                        } else {
+                                            return date('j F Y', $waktu) . " <i class='badge badge-danger'>Waktu Interview/Tes Telah Selesai</i>";
                                         }
-                                    }else{
+                                    } else {
                                         return '<i class="badge badge-warning">Jadwal belum diatur</i>';
                                     }
                                 },
@@ -80,10 +78,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => 'Pilih Soal',
-                                'value' => function($model)
-                                {
+                                'value' => function ($model) {
                                     $jumlahSoal = Penilaian::find()->where(['interview_id' => $model->id])->count();
-                                    return Html::a($jumlahSoal.' Soal',['/soal-interview/pilih-soal','id' => $model->id],['class' => 'btn btn-sm btn-primary']);
+                                    if ($jumlahSoal > 0) {
+                                        return Html::a($jumlahSoal . ' Soal', ['/soal-interview/pilih-soal', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']);
+                                    } else {
+                                        return Html::a($jumlahSoal . ' Soal', ['/soal-interview/pilih-soal', 'id' => $model->id], ['class' => 'btn btn-sm btn-danger']);
+                                    }
                                 },
                                 'format' => 'raw',
                             ],

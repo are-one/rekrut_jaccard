@@ -65,8 +65,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 return '<span class="badge badge-success"> Waktu Tes Telah Selesai</span>';
                                             }
                                         } else {
+                                            $ada = Penilaian::find()->where(['interview_id' => $model->id])->one();
+
+                                            if ($ada) {
+                                                return $textWaktu . ' <br><span class="badge badge-success"> Interview/Tes sudah dikerjakan</span>';
+                                            }
+
                                             return $textWaktu . ' <br><span class="badge badge-info">Data Interview/Tes sedang diproses</span>';
-                                            // return $textWaktu . ' <br><span class="badge badge-success"> Interview/Tes sudah dikerjakan</span>';
                                         }
                                     }
                                 },

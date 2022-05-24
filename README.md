@@ -5,21 +5,28 @@
     <h1 align="center">Yii 2 Advanced Project Template</h1>
     <br>
 </p>
+<h1>Cara instalasi</h1>
+Masuk ke root directory aplikasi lalu ketik kan perintah
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+```
+composer update
+```
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+setelah proses di atas selesai, selanjutnya ketikkan perintah berikut
+```
+php init
+```
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
+akan muncul tampilan seperti berikut ini
+```
+Which environment do you want the application to be initialized in?
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+  [0] Development
+  [1] Production
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![build](https://github.com/yiisoft/yii2-app-advanced/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-advanced/actions?query=workflow%3Abuild)
+  Your choice [0-1, or "q" to quit] 
+```
+pilih 0 untuk masuk ke lingkungan Development dan 1 untuk masuk kelingkungan production
 
 DIRECTORY STRUCTURE
 -------------------

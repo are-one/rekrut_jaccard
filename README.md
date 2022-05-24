@@ -12,6 +12,22 @@ Masuk ke root directory aplikasi lalu ketik kan perintah
 composer update
 ```
 
+setelah proses di atas selesai, selanjutnya ketikkan perintah berikut
+```
+php init
+```
+
+akan muncul tampilan seperti berikut ini
+```
+Which environment do you want the application to be initialized in?
+
+  [0] Development
+  [1] Production
+
+  Your choice [0-1, or "q" to quit] 
+```
+pilih 0 untuk masuk ke lingkungan Development dan 1 untuk masuk kelingkungan production
+
 DIRECTORY STRUCTURE
 -------------------
 

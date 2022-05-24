@@ -11,6 +11,7 @@ use yii\grid\GridView;
 
 $this->title = 'Hasil Interview';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <div class="white_shd full margin_bottom_30">
@@ -32,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['class' => 'yii\grid\SerialColumn'],
 
                             // 'id',
-                            'interview.lowongan.nama',
+                            'interview.lowongan.nama_pekerjaan',
                             'keterangan:ntext',
                             [
                                 'class' => ActionColumn::className(),

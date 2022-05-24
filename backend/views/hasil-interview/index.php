@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Interview;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -26,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-lg-12">
                 <div class="table-responsive-sm">
                     <p>
-                        <?= Html::a('<i class="fas fa-sync"></i> Update Hasil', ['create'], ['class' => 'btn btn-success']) ?>
+                        <?= Html::a('<i class="fas fa-sync"></i> Update Hasil', ['update-hasil'], ['class' => 'btn btn-success']) ?>
                     </p>
 
                     <?php // echo $this->render('_search', ['model' => $searchModel]); 
@@ -40,18 +41,26 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['class' => 'yii\grid\SerialColumn'],
 
                             // 'id',
-                            'keterangan:ntext',
                             [
-                                'attribute' => 'interview_id',
-                                'label' => 'Pelamar',
+                                'attribute' => 'nama_pekerjaan',
+                                'label' => 'Nama Pekerjaan',
                                 'value' => function ($model) {
-                                    return $model->interview->pelamarNik->nama_lengkap;
+                                    return $model->nama_pekerjaan;
                                 }
+                            ],
+                            'deskripsi:ntext',
+                            [
+                                'label' => 'Jumlah Pelamar',
+                                'value' => function ($model) {
+                                    $jumlah = Interview::find()->where(['lowongan_id' => $model->id])->count();
+                                    return Html::a($jumlah, ['view', 'lowongan_id' => $model->id], ['class' => 'btn btn-link']);
+                                },
+                                'format' => 'raw'
                             ],
                             [
                                 'class' => ActionColumn::className(),
-                                'urlCreator' => function ($action, \backend\models\HasilInterview $model, $key, $index, $column) {
-                                    return Url::toRoute([$action, 'id' => $model->id, 'interview_id' => $model->interview_id]);
+                                'urlCreator' => function ($action, \backend\models\Lowongan $model, $key, $index, $column) {
+                                    return Url::toRoute([$action, 'id' => $model->id]);
                                 }
                             ],
                         ],

@@ -13,30 +13,66 @@ composer update
 ```
 
 setelah proses di atas selesai, selanjutnya ketikkan perintah berikut
+
 ```
 php init
 ```
 
 akan muncul tampilan seperti berikut ini
+
 ```
 Which environment do you want the application to be initialized in?
 
   [0] Development
   [1] Production
 
-  Your choice [0-1, or "q" to quit] 
+  Your choice [0-1, or "q" to quit]
 ```
+
 pilih 0 untuk masuk ke lingkungan Development dan 1 untuk masuk kelingkungan production
 
-DIRECTORY STRUCTURE
--------------------
+Selanjutnya, import file database (.sql) yang berada pada
+
+```
+common/docs/
+```
+
+sesuaikan configurasi database aplikasi dengan database yang telah di import pada
+
+```
+common/config/main-local.php
+
+...
+ 'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=db_rekrut_pegawai',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ],
+...
+```
+
+# =======================================================
+
+Jalankan aplikasi dilokal komputer dengan cara mengakses alamat url
+
+```
+- Frontend
+http://localhost/{nama_folder_project}/frontend/web/index.php
+
+- Backend
+http://localhost/{nama_folder_project}/backend/web/index.php
+```
+
+## DIRECTORY STRUCTURE
 
 ```
 common
     config/              contains shared configurations
     mail/                contains view files for e-mails
     models/              contains model classes used in both backend and frontend
-    tests/               contains tests for common classes    
+    tests/               contains tests for common classes
 console
     config/              contains console configurations
     controllers/         contains console controllers (commands)
@@ -49,7 +85,7 @@ backend
     controllers/         contains Web controller classes
     models/              contains backend-specific model classes
     runtime/             contains files generated during runtime
-    tests/               contains tests for backend application    
+    tests/               contains tests for backend application
     views/               contains view files for the Web application
     web/                 contains the entry script and Web resources
 frontend

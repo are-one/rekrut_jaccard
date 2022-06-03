@@ -35,8 +35,7 @@ class SiteController extends Controller
                         'actions' => ['logout', 'index', 'profile'],
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' => function($rule, $action)
-                        {
+                        'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->is_hrd == 1;
                         }
                     ],
@@ -75,7 +74,8 @@ class SiteController extends Controller
             'lowongan' => Lowongan::find()->count(),
             'lulus' => HasilInterview::find()->where(['hasil' => 1])->count(),
         ];
-        return $this->render('index',compact('data'));
+
+        return $this->render('index', compact('data'));
     }
 
     /**
@@ -92,8 +92,15 @@ class SiteController extends Controller
         $this->layout = 'blank';
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->login()) {
+                if (Yii::$app->user->identity->is_hrd == 1) {
+                    return $this->goBack();
+                } else {
+                    Yii::$app->user->logout();
+                    return $this->goHome();
+                }
+            }
         }
 
         $model->password = '';
@@ -121,5 +128,4 @@ class SiteController extends Controller
 
         return $this->render('profile', ['hrd' => $hrd]);
     }
-
 }

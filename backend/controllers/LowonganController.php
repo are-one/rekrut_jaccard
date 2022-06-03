@@ -6,6 +6,7 @@ use backend\models\Hrd;
 use backend\models\Lowongan;
 use backend\models\search\LowonganSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,6 +24,18 @@ class LowonganController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                return Yii::$app->user->identity->is_hrd == 1;
+                            }
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -70,12 +83,12 @@ class LowonganController extends Controller
     public function actionCreate()
     {
         try {
-            
+
             $model = new Lowongan();
             $hrd = Hrd::findOne(['nik' => Yii::$app->user->identity->id]);
-            if($hrd) {
+            if ($hrd) {
                 $model->hrd_nik = $hrd->nik;
-            }else{
+            } else {
                 Yii::$app->session->setFlash('error', 'Update data HRD anda belum lengkap');
                 $this->redirect(['index']);
             }
@@ -92,10 +105,8 @@ class LowonganController extends Controller
             return $this->render('create', [
                 'model' => $model,
             ]);
-
         } catch (\Throwable $th) {
             throw new NotFoundHttpException("Error Processing Request $th");
-            
         }
     }
 

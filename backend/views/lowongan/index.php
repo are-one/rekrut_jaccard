@@ -12,8 +12,11 @@ use yii\grid\GridView;
 $this->title = 'Data Lowongan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
-
+<?php if (Yii::$app->session->hasFlash('error')) : ?>
+    <div class="alert alert-danger">
+        <?= Yii::$app->session->getFlash("error") ?>
+    </div>
+<?php endif; ?>
 <div class="white_shd full margin_bottom_30">
     <div class="full graph_head">
         <div class="heading1 margin_0">
@@ -30,7 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::a('<i class="fas fa-plus-circle"></i> Lowongan', ['create'], ['class' => 'btn btn-success']) ?>
                     </p>
 
-                    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                    <?php // echo $this->render('_search', ['model' => $searchModel]); 
+                    ?>
 
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -46,17 +50,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'tgl_penutupan',
                             [
                                 'attribute' => 'deskripsi',
-                                'value' => function($model)
-                                {
-                                    if(in_array($model->deskripsi,[null, ""])){
+                                'value' => function ($model) {
+                                    if (in_array($model->deskripsi, [null, ""])) {
                                         return "<i>Tidak ada deskripsi</i>";
-                                    }else{
+                                    } else {
                                         return $model->deskripsi;
                                     }
                                 },
                                 'format' => 'raw',
                             ],
-                            
+
                             //'hrd_nik',
                             [
                                 'class' => ActionColumn::className(),

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 24, 2022 at 07:13 AM
+-- Generation Time: Jun 03, 2022 at 02:09 PM
 -- Server version: 5.7.33
 -- PHP Version: 7.4.19
 
@@ -251,7 +251,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`, `verification_token`, `is_hrd`, `usercol`) VALUES
 (321, 'wahid', 'KjMEBEjmOwyIz72-n0lBg-IZJKupaS8d', '$2y$13$1XRDGdDRkJQ88/ybt2jWQuznHt71jC507C5MbOCJVB0VGp7cE6ezC', NULL, 'wahid@gmail.com', 10, 1650087002, 1650087002, 'Q0LiNyYvXw6k4zonXsgZIZyyqhnyuHbz_1650087002', NULL, NULL),
-(12345, 'wahid_hrd', '0ohz9dtg4styDhNPKv0KPBSKmzpt9sih', '$2y$13$ph0c9XrAhFCgQ4ETIjYCDui.efih90QJmPdZqxk8zcTiw93Vrdr0m', NULL, 'arwan@gmail.com', 10, 1644384715, 1644384715, 'pPBQX2KjI6Rqjjk9frWeTN-kyKYweA6t_1644384715', 1, NULL);
+(12345, 'wahid_hrd', '0ohz9dtg4styDhNPKv0KPBSKmzpt9sih', '$2y$13$1XRDGdDRkJQ88/ybt2jWQuznHt71jC507C5MbOCJVB0VGp7cE6ezC', NULL, 'arwan@gmail.com', 10, 1644384715, 1644384715, 'pPBQX2KjI6Rqjjk9frWeTN-kyKYweA6t_1644384715', 1, NULL);
 
 --
 -- Indexes for dumped tables

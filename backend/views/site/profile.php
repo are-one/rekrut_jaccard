@@ -5,6 +5,11 @@ use yii\helpers\Url;
 
 $this->title = "Profile";
 ?>
+<?php if (Yii::$app->session->hasFlash('error')) : ?>
+    <div class="alert alert-danger">
+        <?= Yii::$app->session->getFlash("error") ?>
+    </div>
+<?php endif; ?>
 <div class="row column1">
     <div class="col-md-2"></div>
     <div class="col-md-8">
@@ -14,7 +19,10 @@ $this->title = "Profile";
                     <h2 class="d-inline">Profile</h2>
                 </div>
 
-                <?= Html::a('<i class="fas fa-plus-circle"></i> Edit Profile',['/hrd/edit','nik' => Yii::$app->user->identity->id],['class' => 'btn btn-info float-right']) ?>
+                <?= Html::a('<i class="fas fa-plus-circle"></i> Edit Akun', ['/hrd/akun', 'nik' => Yii::$app->user->identity->id], ['class' => 'btn btn-warning float-right']) ?>
+
+                <?= Html::a('<i class="fas fa-plus-circle"></i> Edit Profile', ['/hrd/edit', 'nik' => Yii::$app->user->identity->id], ['class' => 'btn btn-info float-right mr-2']) ?>
+
 
             </div>
             <div class="full price_table padding_infor_info">
@@ -30,8 +38,12 @@ $this->title = "Profile";
                             <div class="profile_contant">
                                 <div class="contact_inner">
                                     <h3><?= $hrd->nama_lengkap ?></h3>
-                                    <p><strong></strong><?= $hrd->nik ?></p>
+                                    <p><strong>NIK. </strong><?= $hrd->nik ?></p>
                                     <ul class="list-unstyled">
+
+                                        <li><i class="fa fa-envelope"></i> :
+                                            <?= Yii::$app->user->identity->email ?? '<i class="text-muted">Belum diset</i>' ?></li>
+
                                         <li><i class="fa fa-phone"></i> :
                                             <?= $hrd->no_hp ?? '<i class="text-muted">Belum diset</i>' ?></li>
                                     </ul>

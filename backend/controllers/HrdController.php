@@ -2,8 +2,10 @@
 
 namespace backend\controllers;
 
+use backend\models\Akun;
 use backend\models\Hrd;
 use backend\models\search\HrdSearch;
+use Exception;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -27,20 +29,18 @@ class HrdController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['create', 'view','update','index'],
+                            'actions' => ['create', 'view', 'update', 'index', 'delete'],
                             'allow' => true,
                             'roles' => ['@'],
-                            'matchCallback' => function()
-                            {
+                            'matchCallback' => function () {
                                 return Yii::$app->user->identity->is_hrd == 2;
                             }
                         ],
                         [
-                            'actions' => ['edit'],
+                            'actions' => ['edit', 'akun'],
                             'allow' => true,
                             'roles' => ['@'],
-                            'matchCallback' => function()
-                            {
+                            'matchCallback' => function () {
                                 return Yii::$app->user->identity->is_hrd == 1;
                             }
                         ],
@@ -93,10 +93,26 @@ class HrdController extends Controller
     public function actionCreate()
     {
         $model = new Hrd();
+        $model->scenario = $model::SCENARIO_INSERT;
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'nik' => $model->nik]);
+            try {
+
+                if ($model->load($this->request->post())) {
+                    $transction = Yii::$app->db->beginTransaction();
+
+                    if ($model->save() && $model->buatAkun()) {
+                        $transction->commit();
+                        Yii::$app->session->setFlash('success', 'Data berhasil ditambahkan.');
+                        return $this->redirect(['view', 'nik' => $model->nik]);
+                    } else {
+                        $transction->rollBack();
+                        Yii::$app->session->setFlash('error', 'Data gagal ditambahkan.');
+                    }
+                }
+            } catch (\Exception $e) {
+                $transction->rollBack();
+                throw new Exception($e->getMessage());
             }
         } else {
             $model->loadDefaultValues();
@@ -136,7 +152,21 @@ class HrdController extends Controller
      */
     public function actionDelete($nik)
     {
-        $this->findModel($nik)->delete();
+        try {
+            $transction = Yii::$app->db->beginTransaction();
+            $hrd = $this->findModel($nik);
+
+            if ($hrd->delete() && $hrd->hapusAkun()) {
+                Yii::$app->session->setFlash("success", "Data berhasil dihapus.");
+                $transction->commit();
+            } else {
+                Yii::$app->session->setFlash("error", "Data gagal dihapus.");
+                $transction->rollBack();
+            }
+        } catch (\Exception $e) {
+            $transction->rollBack();
+            throw new Exception("Terjadi Masalah");
+        }
 
         return $this->redirect(['index']);
     }
@@ -166,6 +196,28 @@ class HrdController extends Controller
         }
 
         return $this->render('edit', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionAkun($nik)
+    {
+        $model = new Akun();
+        $model->loadOldData();
+
+
+        if ($this->request->isPost && $model->load($this->request->post())) {
+
+            if ($model->updateAkun()) {
+                return $this->redirect(['/site/profile']);
+            }
+
+            Yii::$app->session->setFlash('error', 'Data gagal disimpan.');
+        }
+
+        print_r($model->errors);
+        // die;
+        return $this->render('akun', [
             'model' => $model,
         ]);
     }

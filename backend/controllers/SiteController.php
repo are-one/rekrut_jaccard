@@ -36,7 +36,7 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            return Yii::$app->user->identity->is_hrd == 1;
+                            return Yii::$app->user->identity->is_hrd == 1 || Yii::$app->user->identity->is_hrd == 2;
                         }
                     ],
                 ],
@@ -94,7 +94,7 @@ class SiteController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->login()) {
-                if (Yii::$app->user->identity->is_hrd == 1) {
+                if (Yii::$app->user->identity->is_hrd == 1 || Yii::$app->user->identity->is_hrd == 2) {
                     return $this->goBack();
                 } else {
                     Yii::$app->user->logout();

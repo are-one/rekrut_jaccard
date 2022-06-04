@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Hrd;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -9,18 +10,19 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\search\HrdSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Hrds';
+$this->title = 'Daftar HRD';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="hrd-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <br>
     <p>
-        <?= Html::a('Create Hrd', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Tambah HRD', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); 
+    ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -35,9 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'posisi',
             [
                 'class' => ActionColumn::className(),
+                'visibleButtons' => [],
                 'urlCreator' => function ($action, Hrd $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'nik' => $model->nik]);
-                 }
+                }
             ],
         ],
     ]); ?>

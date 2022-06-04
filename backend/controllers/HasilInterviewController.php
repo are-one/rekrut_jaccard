@@ -195,7 +195,7 @@ class HasilInterviewController extends Controller
                     }
 
                     $modelHI1->hasil = $h['perbedaan'];
-                    $modelHI1->keterangan = ($modelHI1->hasil > 60) ? "Lamaran Diterima" : "Lamaran Ditolak";
+                    $modelHI1->keterangan = ($modelHI1->hasil > 60) ? "Lulus" : "Gagal";
 
 
                     if ($modelHI2->interview_id == null) {
@@ -203,7 +203,7 @@ class HasilInterviewController extends Controller
                     }
 
                     $modelHI2->hasil = $h['perbedaan'];
-                    $modelHI2->keterangan = ($modelHI2->hasil > 60) ? "Lamaran Diterima" : "Lamaran Ditolak";
+                    $modelHI2->keterangan = ($modelHI2->hasil > 60) ? "Lulus" : "Gagal";
 
                     if (!$modelHI1->save() || !$modelHI2->save()) {
                         $isSaved = false;

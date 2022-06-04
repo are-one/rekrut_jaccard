@@ -72,7 +72,7 @@ class SiteController extends Controller
         $data = [
             'pelamar' => Pelamar::find()->count(),
             'lowongan' => Lowongan::find()->count(),
-            'lulus' => HasilInterview::find()->where(['hasil' => 1])->count(),
+            'lulus' => HasilInterview::find()->where(['keterangan' => "Lulus"])->count(),
         ];
 
         return $this->render('index', compact('data'));

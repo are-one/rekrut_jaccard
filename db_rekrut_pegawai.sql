@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 15 Bulan Mei 2022 pada 09.13
+-- Waktu pembuatan: 16 Okt 2022 pada 15.18
 -- Versi server: 5.7.24
 -- Versi PHP: 7.4.21
 
@@ -33,6 +33,14 @@ CREATE TABLE `hasil_interview` (
   `hasil` int(1) DEFAULT NULL,
   `interview_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data untuk tabel `hasil_interview`
+--
+
+INSERT INTO `hasil_interview` (`id`, `keterangan`, `hasil`, `interview_id`) VALUES
+(3, 'Gagal', 0, 2),
+(4, 'Gagal', 0, 7);
 
 -- --------------------------------------------------------
 
@@ -73,9 +81,9 @@ CREATE TABLE `interview` (
 --
 
 INSERT INTO `interview` (`id`, `lowongan_id`, `pelamar_nik`, `tanggal_interview`) VALUES
-(1, 1, '12345', '2022-05-24 00:00:00'),
-(2, 1, '321', '2022-05-21 00:00:00'),
-(3, 2, '321', '2022-05-27 00:00:00');
+(2, 1, '321', '2022-10-20 00:00:00'),
+(3, 2, '321', '2022-05-27 00:00:00'),
+(7, 1, '12346', '2022-10-20 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -143,7 +151,7 @@ CREATE TABLE `pelamar` (
 --
 
 INSERT INTO `pelamar` (`nik`, `nama_lengkap`, `tempat_lahir`, `tanggal_lahir`, `alamat`, `no_hp`, `email`, `file_cv`, `file_ijazah`) VALUES
-('12345', 'Muh. Syafri Jayanto', 'Kendari', '2022-04-14', 'Kendari', '+6285396252675', 'arwanpriantomangidi@gmail.com', '12345-cv-1649422017.pdf', '12345-ijazah-1649422017.pdf'),
+('12346', 'Coba', 'Kendari', '2022-10-27', 'Kendari', '84948443', 'coba-baru@gmail.com', '12346-cv-1665929124.pdf', '12346-ijazah-1665929124.pdf'),
 ('321', 'WAHID', 'Kendari', '2022-04-12', 'Kendari', '+62853330404', 'wahid@gmail.com', '321-cv-1651240408.pdf', '321-ijazah-1651240408.pdf');
 
 -- --------------------------------------------------------
@@ -163,11 +171,9 @@ CREATE TABLE `penilaian` (
 --
 
 INSERT INTO `penilaian` (`interview_id`, `soal_interview_id`, `pilih`) VALUES
-(1, 'S01', NULL),
-(1, 'S02', NULL),
 (2, 'S01', 2),
-(2, 'S02', 4),
-(3, 'S01', 2);
+(2, 'S02', 5),
+(7, 'S02', 4);
 
 -- --------------------------------------------------------
 
@@ -240,8 +246,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`, `verification_token`, `is_hrd`, `usercol`) VALUES
-(321, 'wahid', 'KjMEBEjmOwyIz72-n0lBg-IZJKupaS8d', '$2y$13$1XRDGdDRkJQ88/ybt2jWQuznHt71jC507C5MbOCJVB0VGp7cE6ezC', NULL, 'wahid@gmail.com', 10, 1650087002, 1650087002, 'Q0LiNyYvXw6k4zonXsgZIZyyqhnyuHbz_1650087002', NULL, NULL),
-(12345, 'wahid_hrd', '0ohz9dtg4styDhNPKv0KPBSKmzpt9sih', '$2y$13$ph0c9XrAhFCgQ4ETIjYCDui.efih90QJmPdZqxk8zcTiw93Vrdr0m', NULL, 'arwan@gmail.com', 10, 1644384715, 1644384715, 'pPBQX2KjI6Rqjjk9frWeTN-kyKYweA6t_1644384715', 1, NULL);
+(321, 'wahid', 'FizMz0LanMxPed9IHISV-qG-eXRrLJyY', '$2y$13$5hGFs6Rgks0obehg9fpPJOsJ0nV4EVInQ/HZwFqtMWdb7Pj4xsmQG', NULL, 'wahid@gmail.com', 10, 1650087002, 1650087002, 'Q0LiNyYvXw6k4zonXsgZIZyyqhnyuHbz_1650087002', NULL, NULL),
+(12345, 'wahid_hrd', 'FizMz0LanMxPed9IHISV-qG-eXRrLJyY', '$2y$13$5hGFs6Rgks0obehg9fpPJOsJ0nV4EVInQ/HZwFqtMWdb7Pj4xsmQG', NULL, 'wahidhrd@gmail.com', 10, 1644384715, 1644384715, 'pPBQX2KjI6Rqjjk9frWeTN-kyKYweA6t_1644384715', 1, NULL),
+(12353, 'coba', 'FizMz0LanMxPed9IHISV-qG-eXRrLJyY', '$2y$13$5hGFs6Rgks0obehg9fpPJOsJ0nV4EVInQ/HZwFqtMWdb7Pj4xsmQG', NULL, 'coba-baru@gmail.com', 10, 1665928465, 1665929125, 'QxQGp4KCVI1wjpFcQ4tDNT-2M0OUk0tl_1665928465', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -323,10 +330,16 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT untuk tabel `hasil_interview`
+--
+ALTER TABLE `hasil_interview`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT untuk tabel `interview`
 --
 ALTER TABLE `interview`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `lowongan`
@@ -344,7 +357,7 @@ ALTER TABLE `pilihan_jawaban`
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12346;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12354;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

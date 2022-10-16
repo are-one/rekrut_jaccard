@@ -350,15 +350,22 @@ class HasilInterviewController extends Controller
                     $hasil[$id_loker][$urutanHasil]['id_pelamar_2'] = $interview2['pelamar_nik'];
                     $jawabanInterview1 = $interview1['jawaban'];
                     $jawabanInterview2 = $interview2['jawaban'];
-
+                    
                     // Proses membandingkan jawaban tiap soal
                     // 
                     // - Hitung dengan poin 1 jika jawaban sama pada nomor soal yang sesusai (Intersect)
                     $nilaiIntersect = 0;
                     foreach ($soalInterview as $i => $modelSoal) {
                         $id_soal = $modelSoal->id;
-                        $j1 = $jawabanInterview1[$id_soal]['pilih'];
-                        $j2 = $jawabanInterview2[$id_soal]['pilih'];
+
+                        if(isset($jawabanInterview1[$id_soal])){
+                            $j1 = $jawabanInterview1[$id_soal]['pilih'];
+                        }
+
+                        if(isset($jawabanInterview2[$id_soal])){
+                            $j2 = $jawabanInterview2[$id_soal]['pilih'];
+                        }
+
                         if (($j1 == 1) && ($j2 == 1)) $nilaiIntersect++;
                     }
                     $hasil[$id_loker][$urutanHasil]['intersect'] = $nilaiIntersect; // Hasil poin disimpan disini
@@ -368,8 +375,15 @@ class HasilInterviewController extends Controller
                     $nilaiUnion = 0;
                     foreach ($soalInterview as $i => $modelSoal) {
                         $id_soal = $modelSoal->id;
-                        $j1 = $jawabanInterview1[$id_soal]['pilih'];
-                        $j2 = $jawabanInterview2[$id_soal]['pilih'];
+
+                        if(isset($jawabanInterview1[$id_soal])){
+                            $j1 = $jawabanInterview1[$id_soal]['pilih'];
+                        }
+
+                        if(isset($jawabanInterview2[$id_soal])){
+                            $j2 = $jawabanInterview2[$id_soal]['pilih'];
+                        }
+                        
                         if (($j1 == 1) || ($j2 == 1)) $nilaiUnion++;
                     }
                     $hasil[$id_loker][$urutanHasil]['union'] = $nilaiUnion; // Hasil poin disimpan disini
@@ -389,17 +403,24 @@ class HasilInterviewController extends Controller
     {
         $loker = Lowongan::find()->all();
         $daftarInterview = Interview::find()->joinWith(['pelamarNik', 'penilaians'])->asArray()->all();
+        // print_r($daftarInterview);die;
         $soalInterview = SoalInterview::find()->all();
         $data = $this->getData($loker, $daftarInterview, $soalInterview);
+        // print_r($data);die;
         $analisis = $this->analisis($data, $soalInterview);
+        // print_r($analisis);die;
 
         $hasil = [];
         foreach ($analisis as $id_loker => $listData) {
 
             try {
                 foreach ($listData as $id => $d) {
-                    $d['kesamaan'] = floatval((int) $d['intersect'] / (int) $d['union']) * 100;
-                    $d['perbedaan'] = floatval(((int) $d['union'] - (int) $d['intersect']) / (int) $d['union']) * 100;
+                    $intersect_bagi_union = ($d['union'] != 0)? floatval((int) $d['intersect'] / (int) $d['union']) : 0;
+                    $d['kesamaan'] =  $intersect_bagi_union * 100;
+                    
+                    $union_kurang_intersect_bagi_union = ($d['union'] != 0)? floatval(((int) $d['union'] - (int) $d['intersect']) / (int) $d['union']) : 0;
+                    $d['perbedaan'] = $union_kurang_intersect_bagi_union * 100;
+
                     $hasil[$id_loker][$id] = $d;
                 }
             } catch (\Exception $e) {

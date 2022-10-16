@@ -87,14 +87,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             // 'pelamar_nik',
-            [
-                'class' => ActionColumn::class,
-                'header' => 'Aksi',
-                'urlCreator' => function ($action, Interview $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                },
-                'template' => '{view}'
-            ],
+            // [
+            //     'class' => ActionColumn::class,
+            //     'header' => 'Aksi',
+            //     'urlCreator' => function ($action, Interview $model, $key, $index, $column) {
+            //         return Url::toRoute([$action, 'lowongan_id' => $model->id]);
+            //     },
+            //     'template' => '{view}'
+            // ],
         ],
     ]); ?>
 

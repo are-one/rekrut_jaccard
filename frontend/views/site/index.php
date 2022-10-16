@@ -1,6 +1,7 @@
 <?php
 
 use frontend\models\Interview;
+use frontend\models\Pelamar;
 use yii\bootstrap4\Html;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
@@ -70,9 +71,10 @@ $this->title = "Dashboard";
                                 'class' => ActionColumn::class,
                                 'buttons' => [
                                     'lamar-langsung' => function ($url, $model, $key) {
-                                        $terdaftar = Interview::findOne(['lowongan_id' => $key, 'pelamar_nik' => Yii::$app->user->identity->id]);
+                                        $pelamar = Pelamar::findOne(['email' => Yii::$app->user->identity->email]);
+                                        $terdaftar = Interview::findOne(['lowongan_id' => $key, 'pelamar_nik' => $pelamar->nik]);
                                         if ($terdaftar) {
-                                            return Html::a('Telah Terdaftar', ['/lowongan/view', 'id' => $model->id], ['class' => 'btn btn-danger btn-xs']);
+                                            return Html::a('Telah Terdaftar', '#', ['class' => 'btn btn-danger btn-xs']);
                                         } else {
                                             return Html::a('Lamar Langsung', ['/lowongan/lamar', 'id' => $model->id], ['class' => 'btn btn-success btn-xs']);
                                         }

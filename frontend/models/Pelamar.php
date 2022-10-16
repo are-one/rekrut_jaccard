@@ -36,13 +36,16 @@ class Pelamar extends MainPelamar
         $cekFileIjazah = !in_array($this->file_ijazah,[null, ""]); 
 
         // var_dump([$cekNik, $cekNamaLenkap, $cekTanggalLahir, $cekTanggalLahir, $cekAlamat, $cekNoHp, $cekEmail, $cekFileCv, $cekFileIjazah]);die;
-        return ((
+        $result = ((
             $cekNik && $cekNamaLenkap &&
             $cekTempatLahir && $cekTanggalLahir &&
             $cekAlamat && $cekNoHp &&
             $cekEmail && $cekFileCv &&
             $cekFileIjazah
         )? true : false);
+        
+        // var_dump($result);die;
+        return $result;
     }
 
     public function upload($isDeleteTemp)

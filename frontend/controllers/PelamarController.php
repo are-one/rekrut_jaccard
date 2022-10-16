@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\User;
 use frontend\models\Pelamar;
 use frontend\models\search\PelamarSearch;
 use Yii;
@@ -26,13 +27,7 @@ class PelamarController extends Controller
             [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'except' => ['login', 'signup'],
                     'rules' => [
-                        // [
-                        //     'actions' => ['login','signup'],
-                        //     'allow' => true,
-                        //     'roles' => ['?'],
-                        // ],
                         [
                             'actions' => [],
                             'allow' => true,
@@ -111,11 +106,13 @@ class PelamarController extends Controller
     public function actionUpdate($nik)
     {
         $model = $this->findModel($nik);
+        $user = User::findOne(['email' => $model->email]);
 
         $model->scenario = $model::SCENARIO_UPDATE;
         if($model->file_cv != null || $model->file_ijazah != null) $model->scenario = $model::SCENARIO_INSERT;
 
         if ($this->request->isPost && $model->load($this->request->post())) {
+            $user->email = $model->email;
             $model->uploadCv = UploadedFile::getInstance($model,'uploadCv');
             $model->uploadIjazah = UploadedFile::getInstance($model,'uploadIjazah');
             
@@ -127,8 +124,8 @@ class PelamarController extends Controller
                 $model->file_ijazah = $model->nik. "-ijazah-".time(). '.' . $model->uploadIjazah->extension;
             }
             
-            if($model->upload(false)){
-                if($model->save()){
+            if($model->upload(false)){    
+                if($model->save() && $user->save()){
                     Yii::$app->session->setFlash('success','Profile berhasil diedit.');
                     return $this->redirect(['/site/profile']);
                 }

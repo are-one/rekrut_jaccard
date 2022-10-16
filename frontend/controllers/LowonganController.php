@@ -27,13 +27,7 @@ class LowonganController extends Controller
             [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'except' => ['login', 'signup'],
                     'rules' => [
-                        // [
-                        //     'actions' => ['login','signup'],
-                        //     'allow' => true,
-                        //     'roles' => ['?'],
-                        // ],
                         [
                             'actions' => [],
                             'allow' => true,
@@ -158,27 +152,33 @@ class LowonganController extends Controller
             
             // CEK APAKAH DATA LENGKAP
             // $modelPelamar = new Pelamar();
-            $modelPelamar = Pelamar::findOne(['nik' => Yii::$app->user->identity->id]);
+            $modelPelamar = Pelamar::findOne(['email' => Yii::$app->user->identity->email]);
             if($modelPelamar){
 
                 if($modelPelamar->validasiData()){
                     $modelInterview = new Interview();
         
                     $modelInterview->lowongan_id = $id;
-                    $modelInterview->pelamar_nik = strval(Yii::$app->user->identity->id);
+                    $modelInterview->pelamar_nik = strval($modelPelamar->nik);
         
                     if($modelInterview->save()){
+                        Yii::$app->session->setFlash('success', "Loker berhasil dilamar");
                         return $this->redirect(['/site/index']);
+                    }else{
+                        Yii::$app->session->setFlash('error', "Loker gagal dilamar");
                     }
+                    
+                }else{
+                    Yii::$app->session->setFlash('error', "Mohon lengkapi data anda untuk dapat melamar loker.");
+                    return $this->redirect(['/site/profile']);
                 }
                 
-                Yii::$app->session->setFlash('error', "Mohon lengkapi data anda untuk dapat melamar loker.");
-                return $this->redirect(['/site/profile']);
+            }else{
+                Yii::$app->user->logout();
+                Yii::$app->session->setFlash('error', "Mohon lakukan registrasi ulang karena anda tidak ditemukan.");
+                return $this->redirect(['/site/login']);
             }
 
-            Yii::$app->user->logout();
-            Yii::$app->session->setFlash('error', "Mohon lakukan registrasi ulang karena anda tidak ditemukan.");
-            return $this->redirect(['/site/login']);
             
         } catch (\Throwable $th) {
             throw new NotFoundHttpException("Terjadi masalah pada server $th");

@@ -55,14 +55,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                     if ($model->tanggal_interview == null) {
                                         return "<span class='badge badge-warning'>Belum Ada Jadwal</span>";
-                                    } else {
+                                    } elseif ($waktu < time()) {
+                                        return '<span class="badge badge-danger"> Waktu Tes Telah Selesai</span>';
+                                    }else {
 
                                         if ($dataTes != null) {
 
                                             if ($waktu > time()) {
                                                 return $textWaktu . " " . Html::a('<i class="fa fa-pen"></i> Ikuti Tes', ['/interview/test', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']);
                                             } else {
-                                                return '<span class="badge badge-success"> Waktu Tes Telah Selesai</span>';
+                                                return '<span class="badge badge-danger"> Waktu Tes Telah Selesai</span>';
                                             }
                                         } else {
                                             $ada = Penilaian::find()->where(['interview_id' => $model->id])->one();

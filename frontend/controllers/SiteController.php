@@ -33,11 +33,6 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'except' => ['login', 'signup'],
                 'rules' => [
-                    // [
-                    //     'actions' => ['login','signup'],
-                    //     'allow' => true,
-                    //     'roles' => ['?'],
-                    // ],
                     [
                         'actions' => [],
                         'allow' => true,
@@ -272,7 +267,7 @@ class SiteController extends Controller
 
     public function actionProfile()
     {
-        $pelamar = Pelamar::findOne(['nik' => Yii::$app->user->identity->id]);
+        $pelamar = Pelamar::findOne(['email' => Yii::$app->user->identity->email]);
         return $this->render('profile',['pelamar' => $pelamar]);
     }
 }

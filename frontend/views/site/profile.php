@@ -14,7 +14,7 @@ $this->title = "Profile";
                     <h2 class="d-inline">Profile</h2>
                 </div>
 
-                <?= Html::a('<i class="fas fa-plus-circle"></i> Edit Profile',['/pelamar/update','nik' => Yii::$app->user->identity->id],['class' => 'btn btn-info float-right']) ?>
+                <?= Html::a('<i class="fas fa-plus-circle"></i> Edit Profile',['/pelamar/update','nik' => $pelamar->nik],['class' => 'btn btn-info float-right']) ?>
 
             </div>
             <div class="full price_table padding_infor_info">

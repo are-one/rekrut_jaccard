@@ -77,16 +77,13 @@ class SignupForm extends Model
                 $transaction->commit();
                 return true;
             } else {
+                print_r([$user->getErrors(), $pelamar->getErrors()]);die;
                 Yii::$app->session->setFlash('error', 'Terjadi masalah pada sistem, gagal membuat akun.');
                 $transaction->rollBack();
             }
         } catch (\Exception $e) {
             $transaction->rollBack();
-<<<<<<< HEAD
             Yii::$app->session->setFlash('error','Terjadi masalah pada sistem : '. $e->getMessage());
-=======
-            Yii::$app->session->setFlash('error', 'Terjadi masalah pada sistem, gagal membuat akun.');
->>>>>>> 89d7735a9654db41a8ed13415b6ed1a625b3e330
         }
 
         return false;

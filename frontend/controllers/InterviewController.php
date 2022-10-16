@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\main\Penilaian as MainPenilaian;
 use frontend\models\Interview;
+use frontend\models\Pelamar;
 use frontend\models\Penilaian;
 use frontend\models\search\InterviewSearch;
 use frontend\models\SoalInterview;
@@ -46,7 +47,8 @@ class InterviewController extends Controller
     {
         $searchModel = new InterviewSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->query->andWhere(['pelamar_nik' => Yii::$app->user->identity->id]);
+        $pelamar = Pelamar::findOne(['email' => Yii::$app->user->identity->email]);
+        $dataProvider->query->andWhere(['pelamar_nik' => $pelamar->nik]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -142,7 +144,10 @@ class InterviewController extends Controller
     public function actionTest($id)
     {
         try {
-            $interview = Interview::findOne(['id' => $id, 'pelamar_nik' => Yii::$app->user->identity->id]);
+            $transaction = Yii::$app->db->beginTransaction();
+            
+            $pelamar = Pelamar::findOne(['email' => Yii::$app->user->identity->email]);
+            $interview = Interview::findOne(['id' => $id, 'pelamar_nik' => $pelamar->nik]);
 
             $soal = Penilaian::find()->where(['interview_id' => $interview->id])->all();
 
@@ -155,7 +160,6 @@ class InterviewController extends Controller
             }
 
             if ($this->request->isPost) {
-                $transaction = Yii::$app->db->beginTransaction();
 
                 $jawaban = $this->request->post('jawab');
                 // print_r($this->request->post());

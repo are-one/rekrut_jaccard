@@ -141,36 +141,36 @@ class InterviewController extends Controller
 
     public function actionTest($id)
     {
-       try {
-            $interview = Interview::findOne(['id' => $id,'pelamar_nik' => Yii::$app->user->identity->id]);
+        try {
+            $interview = Interview::findOne(['id' => $id, 'pelamar_nik' => Yii::$app->user->identity->id]);
 
             $soal = Penilaian::find()->where(['interview_id' => $interview->id])->all();
 
             $sudahTest = false;
 
             foreach ($soal as $i => $m) {
-                if($m->pilih != null){
+                if ($m->pilih != null) {
                     $sudahTest = true;
                 }
             }
 
-            if($this->request->isPost){
+            if ($this->request->isPost) {
                 $transaction = Yii::$app->db->beginTransaction();
-                
+
                 $jawaban = $this->request->post('jawab');
                 // print_r($this->request->post());
                 // print_r($soal);
                 // die;
-                
+
                 $sukses = true;
                 foreach ($soal as $i => $modelSoal) {
                     $idSoal = $modelSoal->soal_interview_id;
-                    
-                    if(isset($jawaban[$idSoal])){
+
+                    if (isset($jawaban[$idSoal])) {
                         $pilih = $jawaban[$idSoal];
                         $modelSoal->pilih = $pilih;
                         $modelSoal->save();
-                    }else{
+                    } else {
                         $sukses = false;
                     }
                 }
@@ -184,22 +184,20 @@ class InterviewController extends Controller
                 //     $jawab->save();
                 // }
 
-                if($sukses){
+                if ($sukses) {
                     $transaction->commit();
-                    Yii::$app->session->setFlash('success','Jawaban anda <b>Berhasil disimpan.</b>');
+                    Yii::$app->session->setFlash('success', 'Jawaban anda <b>Berhasil disimpan.</b>');
                     return $this->redirect(['index']);
                 }
-                
-                $transaction->rollBack();
-                Yii::$app->session->setFlash('error','Jawaban anda <b>Gagal disimpan.</b>');
 
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', 'Jawaban anda <b>Gagal disimpan.</b>');
             }
-            
         } catch (\Throwable $th) {
             $transaction->rollBack();
-            throw new BadRequestHttpException('Terjadi Kesalahan'.$th->getMessage());
+            throw new BadRequestHttpException('Terjadi Kesalahan' . $th->getMessage());
         }
-        
-        return $this->render('test', ['soal' => $soal,'sudahTest' => $sudahTest]);
+
+        return $this->render('test', ['soal' => $soal, 'sudahTest' => $sudahTest]);
     }
 }

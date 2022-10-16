@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use backend\models\PilihanJawaban;
 use backend\models\search\PilihanJawabanSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +23,18 @@ class PilihanJawabanController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                return Yii::$app->user->identity->is_hrd == 1;
+                            }
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -70,7 +84,7 @@ class PilihanJawabanController extends Controller
     {
         $model = new PilihanJawaban();
         $model->soal_interview_id = $soal_interview_id;
-        
+
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['/soal-interview/view', 'id' => $model->soal_interview_id]);

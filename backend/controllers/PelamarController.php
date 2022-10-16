@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use backend\models\Pelamar;
 use backend\models\search\PelamarSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +23,18 @@ class PelamarController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                return Yii::$app->user->identity->is_hrd == 1;
+                            }
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -132,12 +146,12 @@ class PelamarController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionFile($id,$j)
+    public function actionFile($id, $j)
     {
         try {
-            $filePath = \Yii::getAlias("@frontend/assets/berkas/".$id);
+            $filePath = \Yii::getAlias("@frontend/assets/berkas/" . $id);
 
-            return $this->response->sendFile($filePath, "Lihat File ".$j.".pdf",['inline' => true])->send();
+            return $this->response->sendFile($filePath, "Lihat File " . $j . ".pdf", ['inline' => true])->send();
         } catch (\Throwable $th) {
             throw new NotFoundHttpException("File tidak ditemukan");
         }

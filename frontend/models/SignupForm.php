@@ -55,11 +55,11 @@ class SignupForm extends Model
     {
         try {
             $transaction = Yii::$app->db->beginTransaction();
-            
+
             if (!$this->validate()) {
                 return null;
             }
-            
+
             $user = new User();
             $user->username = $this->username;
             $user->email = $this->email;
@@ -72,18 +72,21 @@ class SignupForm extends Model
             $pelamar->nik = $this->nik;
             $pelamar->nama_lengkap = $this->nama_lengkap;
             $pelamar->email = $this->email;
-    
-            if($user->save() && $this->sendEmail($user) && $pelamar->save()){
+
+            if ($user->save() && $this->sendEmail($user) && $pelamar->save()) {
                 $transaction->commit();
                 return true;
-            }else{
-                Yii::$app->session->setFlash('error','Terjadi masalah pada sistem, gagal membuat akun.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Terjadi masalah pada sistem, gagal membuat akun.');
                 $transaction->rollBack();
             }
-            
         } catch (\Exception $e) {
             $transaction->rollBack();
+<<<<<<< HEAD
             Yii::$app->session->setFlash('error','Terjadi masalah pada sistem : '. $e->getMessage());
+=======
+            Yii::$app->session->setFlash('error', 'Terjadi masalah pada sistem, gagal membuat akun.');
+>>>>>>> 89d7735a9654db41a8ed13415b6ed1a625b3e330
         }
 
         return false;

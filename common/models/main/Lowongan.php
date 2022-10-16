@@ -33,7 +33,7 @@ class Lowongan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tgl_publish', 'tgl_penutupan'], 'safe'],
+            [['nama_pekerjaan', 'deskripsi', 'tgl_publish', 'tgl_penutupan'], 'required'],
             [['deskripsi'], 'string'],
             [['hrd_nik'], 'required'],
             [['nama_pekerjaan', 'hrd_nik'], 'string', 'max' => 45],

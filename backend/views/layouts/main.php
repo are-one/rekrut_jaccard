@@ -56,7 +56,6 @@ FontAwesomeAsset::register($this);
                         </div>
                         <!-- row -->
 
-                        <?= Alert::widget() ?>
 
                         <div class="row column1">
                             <div class="col-md-12">

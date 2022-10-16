@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use frontend\models\HasilInterview;
 use frontend\models\search\HasilInterviewSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -40,6 +41,7 @@ class HasilInterviewController extends Controller
     {
         $searchModel = new HasilInterviewSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['i.pelamar_nik' => Yii::$app->user->identity->id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

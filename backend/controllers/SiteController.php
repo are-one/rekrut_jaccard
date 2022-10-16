@@ -35,9 +35,8 @@ class SiteController extends Controller
                         'actions' => ['logout', 'index', 'profile'],
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' => function($rule, $action)
-                        {
-                            return Yii::$app->user->identity->is_hrd == 1;
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->is_hrd == 1 || Yii::$app->user->identity->is_hrd == 2;
                         }
                     ],
                 ],
@@ -73,9 +72,10 @@ class SiteController extends Controller
         $data = [
             'pelamar' => Pelamar::find()->count(),
             'lowongan' => Lowongan::find()->count(),
-            'lulus' => HasilInterview::find()->where(['hasil' => 1])->count(),
+            'lulus' => HasilInterview::find()->where(['keterangan' => "Lulus"])->count(),
         ];
-        return $this->render('index',compact('data'));
+
+        return $this->render('index', compact('data'));
     }
 
     /**
@@ -92,8 +92,15 @@ class SiteController extends Controller
         $this->layout = 'blank';
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->login()) {
+                if (Yii::$app->user->identity->is_hrd == 1 || Yii::$app->user->identity->is_hrd == 2) {
+                    return $this->goBack();
+                } else {
+                    Yii::$app->user->logout();
+                    return $this->goHome();
+                }
+            }
         }
 
         $model->password = '';
@@ -121,5 +128,4 @@ class SiteController extends Controller
 
         return $this->render('profile', ['hrd' => $hrd]);
     }
-
 }

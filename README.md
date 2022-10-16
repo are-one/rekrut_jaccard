@@ -5,31 +5,76 @@
     <h1 align="center">Yii 2 Advanced Project Template</h1>
     <br>
 </p>
+<h1>Cara instalasi</h1>
+Masuk ke root directory aplikasi lalu ketik kan perintah
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+```
+composer update
+```
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+setelah proses di atas selesai, selanjutnya ketikkan perintah berikut
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
+```
+php init
+```
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+akan muncul tampilan seperti berikut ini
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![build](https://github.com/yiisoft/yii2-app-advanced/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-advanced/actions?query=workflow%3Abuild)
+```
+Which environment do you want the application to be initialized in?
 
-DIRECTORY STRUCTURE
--------------------
+  [0] Development
+  [1] Production
+
+  Your choice [0-1, or "q" to quit]
+```
+
+pilih 0 untuk masuk ke lingkungan Development dan 1 untuk masuk kelingkungan production
+
+Selanjutnya, import file database (.sql) yang berada pada
+
+```
+common/docs/
+```
+
+sesuaikan configurasi database aplikasi dengan database yang telah di import pada
+
+```
+common/config/main-local.php
+
+...
+ 'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=db_rekrut_pegawai',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ],
+...
+```
+
+# =======================================================
+
+<h1>Menjalankan Aplikasi</h1>
+
+Jalankan aplikasi dilokal komputer dengan cara mengakses alamat url
+
+```
+- Frontend
+http://localhost/{nama_folder_project}/frontend/web/index.php
+
+- Backend
+http://localhost/{nama_folder_project}/backend/web/index.php
+```
+
+## DIRECTORY STRUCTURE
 
 ```
 common
     config/              contains shared configurations
     mail/                contains view files for e-mails
     models/              contains model classes used in both backend and frontend
-    tests/               contains tests for common classes    
+    tests/               contains tests for common classes
 console
     config/              contains console configurations
     controllers/         contains console controllers (commands)
@@ -42,7 +87,7 @@ backend
     controllers/         contains Web controller classes
     models/              contains backend-specific model classes
     runtime/             contains files generated during runtime
-    tests/               contains tests for backend application    
+    tests/               contains tests for backend application
     views/               contains view files for the Web application
     web/                 contains the entry script and Web resources
 frontend

@@ -56,6 +56,8 @@ class HasilInterviewSearch extends HasilInterview
             return $dataProvider;
         }
 
+        $query->joinWith(['interview i']);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

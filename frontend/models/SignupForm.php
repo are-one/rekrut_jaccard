@@ -66,7 +66,6 @@ class SignupForm extends Model
             $user->setPassword($this->password);
             $user->generateAuthKey();
             $user->generateEmailVerificationToken();
-            $user->isHrd = 0;
 
             // Insert Pelamar
             $pelamar = new Pelamar(['scenario' => Pelamar::SCENARIO_INSERT]);
@@ -84,7 +83,7 @@ class SignupForm extends Model
             
         } catch (\Exception $e) {
             $transaction->rollBack();
-            Yii::$app->session->setFlash('error','Terjadi masalah pada sistem, gagal membuat akun.');
+            Yii::$app->session->setFlash('error','Terjadi masalah pada sistem : '. $e->getMessage());
         }
 
         return false;

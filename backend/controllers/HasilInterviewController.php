@@ -6,6 +6,7 @@ use backend\models\HasilInterview;
 use backend\models\Interview;
 use backend\models\Lowongan;
 use backend\models\Pelamar;
+use backend\models\PilihanJawaban;
 use backend\models\search\HasilInterviewSearch;
 use backend\models\search\InterviewSearch;
 use backend\models\search\LowonganSearch;
@@ -186,7 +187,7 @@ class HasilInterviewController extends Controller
 
             $isSaved = true;
             foreach ($hasil as $id_loker => $dataHasil) {
-                foreach ($dataHasil as $ih => $h) {
+                foreach ($dataHasil as $index => $h) {
                     $modelHI1 = HasilInterview::findOne(['interview_id' => $h['id_interview_1']]) ??  new HasilInterview;
                     $modelHI2 = HasilInterview::findOne(['interview_id' => $h['id_interview_2']]) ?? new HasilInterview;
 
@@ -242,7 +243,7 @@ class HasilInterviewController extends Controller
         $arraySoalInterview = ArrayHelper::map($soalInterview, 'id', function ($model) {
             return $model;
         });
-
+        // print_r($arraySoalInterview);die;
         /* $data = [
             id_loker => [
                 [
@@ -270,12 +271,13 @@ class HasilInterviewController extends Controller
                     $tempJawaban = ArrayHelper::map($mInterview['penilaians'], 'soal_interview_id', function ($dj) {
                         return $dj;
                     });
-
+                   
                     // TODO Urutkan jawaban sesuai data soal dan Validasi jawaban berdasarkan jawaban soal
                     foreach ($arraySoalInterview as $is => $mSoal) {
+                       
                         if (isset($tempJawaban[$mSoal->id])) {
                             $dataJawaban = $tempJawaban[$mSoal->id];
-
+                            
                             unset($dataJawaban['soal_interview_id']);
 
                             /* 
@@ -283,12 +285,17 @@ class HasilInterviewController extends Controller
                              */
                             $dataJawaban['pilih'] = ($mSoal->jawaban == $dataJawaban['pilih']) ? 1 : 0;
                             $mInterview['jawaban'][$mSoal->id] = $dataJawaban;
-                        } else {
-                            $mInterview['jawaban'] = false;
+                           
                         }
+                        // jadi bug ketika ada soal id bagian tengah yang tidak ada
+                        // maka semua jawaban sebelumnya yang sudah dipetakan akan di hilangkan
+                        // else {
+                        //     echo "coba";
+                        //     $mInterview['jawaban'] = false;
+                        // }
+                        
                         unset($mInterview['penilaians']);
                     }
-
 
                     $data[$mLoker->id][] = $mInterview;
                 }
@@ -401,12 +408,23 @@ class HasilInterviewController extends Controller
 
     public function hitung()
     {
+        // mengabil daftar pilihan jawaban
+        $pilihan_jawaban = ArrayHelper::getColumn(PilihanJawaban::find()->all(),function($elemen)
+        {
+            return ['id' => $elemen['soal_interview_id'], 'jawaban' =>$elemen['id']];
+        });
+
+
         $loker = Lowongan::find()->all();
         $daftarInterview = Interview::find()->joinWith(['pelamarNik', 'penilaians'])->asArray()->all();
         // print_r($daftarInterview);die;
-        $soalInterview = SoalInterview::find()->all();
+
+        //Mengambil soal yang memiliki jawaban
+        $soalInterview = SoalInterview::find()->where(['IN',['id', 'jawaban'],$pilihan_jawaban])->all();
+        
         $data = $this->getData($loker, $daftarInterview, $soalInterview);
         // print_r($data);die;
+        
         $analisis = $this->analisis($data, $soalInterview);
         // print_r($analisis);die;
 
@@ -414,19 +432,21 @@ class HasilInterviewController extends Controller
         foreach ($analisis as $id_loker => $listData) {
 
             try {
-                foreach ($listData as $id => $d) {
+                foreach ($listData as $index => $d) {
+                    // print_r($id);die;
                     $intersect_bagi_union = ($d['union'] != 0)? floatval((int) $d['intersect'] / (int) $d['union']) : 0;
                     $d['kesamaan'] =  $intersect_bagi_union * 100;
                     
                     $union_kurang_intersect_bagi_union = ($d['union'] != 0)? floatval(((int) $d['union'] - (int) $d['intersect']) / (int) $d['union']) : 0;
                     $d['perbedaan'] = $union_kurang_intersect_bagi_union * 100;
 
-                    $hasil[$id_loker][$id] = $d;
+                    $hasil[$id_loker][$index] = $d;
                 }
             } catch (\Exception $e) {
                 throw new BadRequestHttpException($e->getMessage());
             }
         }
+        // print_r($hasil);die;
 
         return $hasil;
     }

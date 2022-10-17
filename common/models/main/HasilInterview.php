@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string|null $keterangan
- * @property int|null $hasil
+ * @property float|null $hasil
  * @property int $interview_id
  *
  * @property Interview $interview
@@ -31,8 +31,9 @@ class HasilInterview extends \yii\db\ActiveRecord
     {
         return [
             [['keterangan'], 'string'],
-            [['hasil', 'interview_id'], 'integer'],
+            [['hasil'], 'number'],
             [['interview_id'], 'required'],
+            [['interview_id'], 'integer'],
             [['interview_id'], 'exist', 'skipOnError' => true, 'targetClass' => Interview::className(), 'targetAttribute' => ['interview_id' => 'id']],
         ];
     }

@@ -22,7 +22,9 @@ $this->title = "Pilih Soal";
     <div class="full price_table padding_infor_info">
         <div class="row">
             <div class="col-lg-12">
-
+                <div class="alert alert-info">
+                    Hanya soal yang memiliki jawaban yang ditampilkan
+                </div>
                 <?= Html::submitButton('Simpan',['class' => 'btn btn-success mb-2']) ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,

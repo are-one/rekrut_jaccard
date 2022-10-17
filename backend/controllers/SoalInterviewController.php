@@ -162,10 +162,16 @@ class SoalInterviewController extends Controller
     public function actionPilihSoal($id)
     {
         $soalInterviewModel = new SoalInterview;
+        $pilihan_jawaban = ArrayHelper::getColumn(PilihanJawaban::find()->all(),function($elemen)
+        {
+            return ['id' => $elemen['soal_interview_id'], 'jawaban' =>$elemen['id']];
+        });
+        // print_r($pilihan_jawaban);die;
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $soalInterviewModel->find(),
+            'query' => $soalInterviewModel->find()->where(['IN',['id', 'jawaban'],$pilihan_jawaban]),
         ]);
+        
         $penilaianModel = new Penilaian();
         $pilihanSoalLama = ArrayHelper::getColumn($penilaianModel->find()->where(['interview_id' => $id])->all(), 'soal_interview_id');
         // print_r($pilihanSoal);die;

@@ -66,12 +66,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'format' => 'raw'
                             ],
-                            [
-                                'class' => ActionColumn::className(),
-                                'urlCreator' => function ($action, \backend\models\Lowongan $model, $key, $index, $column) {
-                                    return Url::toRoute([$action, 'id' => $model->id]);
-                                }
-                            ],
+                            // [
+                            //     'class' => ActionColumn::className(),
+                            //     'urlCreator' => function ($action, \backend\models\Lowongan $model, $key, $index, $column) {
+                            //         return Url::toRoute([$action, 'id' => $model->id]);
+                            //     }
+                            // ],
                         ],
                     ]); ?>
 

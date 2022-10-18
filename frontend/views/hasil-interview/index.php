@@ -35,12 +35,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'id',
                             'interview.lowongan.nama_pekerjaan',
                             'keterangan:ntext',
-                            [
-                                'class' => ActionColumn::className(),
-                                'urlCreator' => function ($action, \frontend\models\HasilInterview $model, $key, $index, $column) {
-                                    return Url::toRoute([$action, 'id' => $model->id, 'interview_id' => $model->interview_id]);
-                                }
-                            ],
+                            // [
+                            //     'class' => ActionColumn::className(),
+                            //     'urlCreator' => function ($action, \frontend\models\HasilInterview $model, $key, $index, $column) {
+                            //         return Url::toRoute([$action, 'id' => $model->id, 'interview_id' => $model->interview_id]);
+                            //     }
+                            // ],
                         ],
                     ]); ?>
 

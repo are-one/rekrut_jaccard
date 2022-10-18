@@ -147,11 +147,15 @@ class HasilInterviewController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id, $interview_id)
+    public function actionDelete($lowongan_id, $interview_id)
     {
-        $this->findModel($id, $interview_id)->delete();
-
-        return $this->redirect(['index']);
+        // $this->findModel($id, $interview_id)->delete();
+       if(HasilInterview::deleteAll(['interview_id'=> $interview_id]))
+       {
+            Yii::$app->session->setFlash('success','Data berhasil dihapus');
+       }
+        
+        return $this->redirect(['view','lowongan_id' => $lowongan_id]);
     }
 
     /**
@@ -297,6 +301,11 @@ class HasilInterviewController extends Controller
                         unset($mInterview['penilaians']);
                     }
 
+                    // Jika tdk ada jawaban maka jawaban diset false
+                    if(!isset($mInterview['jawaban'])){
+                        $mInterview['jawaban'] = false;
+                    }
+
                     $data[$mLoker->id][] = $mInterview;
                 }
             }
@@ -357,7 +366,7 @@ class HasilInterviewController extends Controller
                     $hasil[$id_loker][$urutanHasil]['id_pelamar_2'] = $interview2['pelamar_nik'];
                     $jawabanInterview1 = $interview1['jawaban'];
                     $jawabanInterview2 = $interview2['jawaban'];
-                    
+
                     // Proses membandingkan jawaban tiap soal
                     // 
                     // - Hitung dengan poin 1 jika jawaban sama pada nomor soal yang sesusai (Intersect)
@@ -401,6 +410,7 @@ class HasilInterviewController extends Controller
                 // unset bagian pertama list2 yang telah digunakan dari data list1
                 unset($list2Interview[0]);
             }
+
         }
 
         return $hasil;

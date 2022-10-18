@@ -15,6 +15,13 @@ $this->params['breadcrumbs'][] = ['label' => 'Hasil Interviews', 'url' => ['inde
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
+
+<?php if (Yii::$app->session->hasFlash('success')) : ?>
+<div class="alert alert-success">
+    <?= Yii::$app->session->getFlash("success") ?>
+</div>
+<?php endif; ?>
+
 <div class="hasil-interview-view">
 
     <!-- <h1><?= Html::encode($this->title) ?></h1> -->
@@ -87,14 +94,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             // 'pelamar_nik',
-            // [
-            //     'class' => ActionColumn::class,
-            //     'header' => 'Aksi',
-            //     'urlCreator' => function ($action, Interview $model, $key, $index, $column) {
-            //         return Url::toRoute([$action, 'lowongan_id' => $model->id]);
-            //     },
-            //     'template' => '{view}'
-            // ],
+            [
+                'class' => ActionColumn::class,
+                'header' => 'Aksi',
+                'urlCreator' => function ($action, Interview $model, $key, $index, $column) use ($modelLowongan) {
+                    return Url::toRoute([$action, 'lowongan_id'=> $modelLowongan->id, 'interview_id' => $model->id]);
+                },
+                'template' => '{delete}'
+            ],
         ],
     ]); ?>
 
